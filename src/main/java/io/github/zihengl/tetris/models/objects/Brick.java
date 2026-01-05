@@ -11,7 +11,7 @@ public class Brick extends Cell {
 
     public void update(Tetromino pivot) {
         Point offset = pivot.getOffset(this.ordinal),
-              coords = pivot.quadrant.compensate(offset);
+              coords = pivot.add(pivot.quadrant.compensate(offset));
 
         this.set(coords);
     }

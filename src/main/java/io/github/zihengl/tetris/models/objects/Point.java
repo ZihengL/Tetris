@@ -30,4 +30,8 @@ public class Point {
     public Point dotProduct(int scalar) {
         return new Point(this.x * scalar, this.y * scalar);
     }
+
+    public Point add(Point p) {
+        return new Point(this.x + p.x, this.y + p.y);
+    }
 }

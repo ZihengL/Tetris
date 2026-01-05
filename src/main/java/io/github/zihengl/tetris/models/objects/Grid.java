@@ -1,18 +1,14 @@
 package io.github.zihengl.tetris.models.objects;
 
-import io.github.zihengl.tetris.models.enums.Orientations;
-import io.github.zihengl.tetris.models.enums.Tetrominos;
-
 public class Grid {
 
     public static final int WIDTH = 10;
     public static final int HEIGHT = 40;
     public static final int BUFFER = 20;
     public static final int ANCHOR_X = WIDTH / 2;
-    public static final int ANCHOR_Y = HEIGHT;
+    public static final int ANCHOR_Y = HEIGHT - 1;
 
     public final Cell[][] cells;
-//    private Tetromino tetromino;
 
     public Grid() {
         this.cells = new Cell[HEIGHT][WIDTH];
@@ -29,8 +25,15 @@ public class Grid {
         return this.cells[p.y][p.x];
     }
 
+    // OTHER
+
+    // TODO: CONSIDER DOING: FOREACH BRICK -> THIS.GET(BRICK) = BRICK;
     public void fill(Point p) {
         this.get(p).fill();
+    }
+
+    public void empty(Point p) {
+        this.get(p).empty();
     }
 
     public boolean isFilledAt(Point p) {
@@ -44,4 +47,10 @@ public class Grid {
 
         return true;
     }
+
+    public void emptyRow(int index) {
+        for (Cell cell : this.cells[index])
+            cell.empty();
+    }
+
 }

@@ -9,7 +9,6 @@ public class Tetromino extends Cell {
 
     protected Brick[] bricks;
     protected Quadrants quadrant;
-//    protected boolean settled;
 
     public Tetromino(int x, int y, Tetrominos type) {
         super(x, y, true);
@@ -17,10 +16,8 @@ public class Tetromino extends Cell {
 
         Point[] offsets = this.type.offsets;
         this.bricks = new Brick[offsets.length];
-        for (int i = 0; i < offsets.length; i++) {
-            Point offset = offsets[i];
-            this.bricks[i] = new Brick(this.x + offset.x, this.y + offset.y, i);
-        }
+        for (int i = 0; i < offsets.length; i++)
+            this.bricks[i] = new Brick(this.x + offsets[i].x, this.y + offsets[i].y, i);
 
         this.quadrant = Quadrants.I;
     }
@@ -33,7 +30,7 @@ public class Tetromino extends Cell {
         return this.quadrant;
     }
 
-    // METHODS
+    // OTHER
 
     public void translate(Point displacement) {
         super.translate(displacement);
@@ -43,8 +40,8 @@ public class Tetromino extends Cell {
 
     public boolean isValid(Grid grid) {
         for (Brick b : this.bricks)
-            if (!(b.isOutOfBounds() || grid.isFilledAt(b)))
-                return true;
+            if (b.isOutOfBounds() || grid.isFilledAt(b))
+                return false;
 
         return !(this.isOutOfBounds() || grid.isFilledAt(this));
     }
@@ -64,5 +61,13 @@ public class Tetromino extends Cell {
     public void update() {
         for (Brick brick : this.bricks)
             brick.update(this);
+    }
+
+    public boolean isAt(int x, int y) {
+        for (Brick brick : this.bricks)
+            if (brick.x == x && brick.y == y)
+                return true;
+
+        return this.x == x && this.y == y;
     }
 }
