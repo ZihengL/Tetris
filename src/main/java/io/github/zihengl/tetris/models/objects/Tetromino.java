@@ -41,28 +41,12 @@ public class Tetromino extends Cell {
         this.update();
     }
 
-    public boolean isInvalid(Grid grid) {
+    public boolean isValid(Grid grid) {
         for (Brick b : this.bricks)
-            if (b.isOutOfBounds() || grid.isFilledAt(b))
+            if (!(b.isOutOfBounds() || grid.isFilledAt(b)))
                 return true;
 
-        return this.isOutOfBounds() || grid.isFilledAt(this);
-    }
-
-    public boolean outOfBounds() {
-        for (Brick brick : this.bricks)
-            if (brick.isOutOfBounds())
-                return true;
-
-        return this.isOutOfBounds();
-    }
-
-    public boolean overlaps(Grid grid) {
-        for (Brick brick : this.bricks)
-            if (grid.isFilledAt(brick))
-                return true;
-
-        return grid.isFilledAt(this);
+        return !(this.isOutOfBounds() || grid.isFilledAt(this));
     }
 
     public void rotateRight() {

@@ -2,6 +2,8 @@ package io.github.zihengl.tetris.models.enums;
 
 import io.github.zihengl.tetris.models.objects.Point;
 
+import java.util.Random;
+
 public enum Tetrominos {
 
     L(new Point[] { new Point(0, -1), new Point(0, -2), new Point(1, -2) }),

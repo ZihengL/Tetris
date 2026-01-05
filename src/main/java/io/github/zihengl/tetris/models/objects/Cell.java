@@ -33,4 +33,8 @@ public class Cell extends Point {
         return this.x < 0 || this.y < 0 ||
             this.x >= Grid.WIDTH || this.y >= Grid.HEIGHT;
     }
+
+    public String toString() {
+        return String.format("[%d, %d]", this.x, this.y);
+    }
 }

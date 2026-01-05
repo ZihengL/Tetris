@@ -1,6 +1,7 @@
 package io.github.zihengl.tetris.models.objects;
 
 import io.github.zihengl.tetris.models.enums.Orientations;
+import io.github.zihengl.tetris.models.enums.Tetrominos;
 
 public class Grid {
 
@@ -11,7 +12,7 @@ public class Grid {
     public static final int ANCHOR_Y = HEIGHT;
 
     public final Cell[][] cells;
-    private Tetromino tetromino;
+//    private Tetromino tetromino;
 
     public Grid() {
         this.cells = new Cell[HEIGHT][WIDTH];
@@ -36,22 +37,11 @@ public class Grid {
         return this.cells[p.y][p.x].isFilled();
     }
 
-    public void settle() {
-        this.cells[this.tetromino.y][this.tetromino.x].setFilled(true);
-        for (Brick brick : this.tetromino.bricks)
-            this.cells[brick.y][brick.x].setFilled(true);
+    public boolean isRowFilled(int index) {
+        for (Cell cell : this.cells[index])
+            if (!cell.isFilled())
+                return false;
+
+        return true;
     }
-
-    public void shift(Orientations o) {
-        this.tetromino.translate(o.p);
-
-        if (this.tetromino.isInvalid(this)) {
-            this.tetromino.translate(o.opposite().p);
-
-            if (o.equals(Orientations.SOUTH))
-                this.settle();
-        }
-    }
-
-
 }
