@@ -8,7 +8,7 @@ import java.util.Random;
 
 public class Tetris extends Observable {
 
-    public static final int ROW_SCORE = 1000;
+    public static final int ROW_SCORE = 100;
     private static final Random randomizer = new Random();
 
     private final Grid grid;
@@ -24,8 +24,6 @@ public class Tetris extends Observable {
         Tetrominos[] values = Tetrominos.values();
         this.queue = values[randomizer.nextInt(values.length)];
         this.nextTetro();
-
-        this.tetro = new Tetromino(Grid.ANCHOR_X, Grid.ANCHOR_Y, Tetrominos.T);
     }
 
     // GETTERS & SETTERS
@@ -56,6 +54,7 @@ public class Tetris extends Observable {
 
     // PLAYER CONTROLS
 
+    // TODO: ONLY ROTATE BACK IF NO OTHER CHOICE
     public void rotateRight() {
         this.tetro.rotateRight();
 
@@ -93,7 +92,8 @@ public class Tetris extends Observable {
     // OTHER
 
     public void nextTetro() {
-        this.tetro = new Tetromino(Grid.ANCHOR_X, Grid.ANCHOR_Y, this.queue);
+        Point pivot = Grid.PIVOT_SPAWN;
+        this.tetro = new Tetromino(pivot.x, pivot.y, this.queue);
 
         Tetrominos[] values = Tetrominos.values();
         this.queue = values[randomizer.nextInt(values.length)];
@@ -129,9 +129,9 @@ public class Tetris extends Observable {
             if (this.grid.isRowFilled(i)) {
                 this.grid.emptyRow(i);
                 this.addToScore(ROW_SCORE * multiplier++);
-
-                // TODO: MAKE ROWS THAT ARE HIGHER FALL DOWN
             }
+
+        // TODO: MAKE ROWS THAT ARE HIGHER FALL DOWN AFTERWARDS
     }
 
 //    public String toString() {

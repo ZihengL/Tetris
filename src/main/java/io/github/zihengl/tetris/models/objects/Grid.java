@@ -5,8 +5,9 @@ public class Grid {
     public static final int WIDTH = 10;
     public static final int HEIGHT = 40;
     public static final int BUFFER = 20;
-    public static final int ANCHOR_X = WIDTH / 2;
+    public static final int ANCHOR_X = WIDTH / 2 - 1;
     public static final int ANCHOR_Y = HEIGHT - 1;
+    public static final Point PIVOT_SPAWN = new Point(WIDTH / 2 - 1, HEIGHT - 2);
 
     public final Cell[][] cells;
 
@@ -28,6 +29,8 @@ public class Grid {
     // OTHER
 
     // TODO: CONSIDER DOING: FOREACH BRICK -> THIS.GET(BRICK) = BRICK;
+    // So to conserve colors for UI
+    // TODO: ALTERNATIVELY, CREATE AN ENUM OF ALL TYPES + EMPTY, AND USE THAT
     public void fill(Point p) {
         this.get(p).fill();
     }
