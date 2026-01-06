@@ -4,10 +4,10 @@ import io.github.zihengl.tetris.models.objects.Point;
 
 public enum Quadrants {
 
-    I(new Point(1, 1)),
-    II(new Point(-1, 1)),
-    III(new Point(-1, -1)),
-    IV(new Point(1, -1));
+    I(Orientations.EAST.add(Orientations.NORTH)),   // (1, 1)
+    II(Orientations.NORTH.add(Orientations.WEST)),  // (-1, 1)
+    III(Orientations.WEST.add(Orientations.SOUTH)), // (-1, -1)
+    IV(Orientations.SOUTH.add(Orientations.EAST));  // (1, -1)
 
     public final Point p;
 
@@ -34,9 +34,13 @@ public enum Quadrants {
         return (this.ordinal() + 1) % 2 == 0;
     }
 
-    public Point compensate(Point p) {
+    public Point turn(Point p) {
         return this.isFlipped() ?
                 new Point(p.y * this.p.x, p.x * this.p.y) :
                 new Point(p.x * this.p.x, p.y * this.p.y);
+    }
+
+    public Orientations getEquivalent() {
+        return Orientations.values()[this.ordinal()];
     }
 }

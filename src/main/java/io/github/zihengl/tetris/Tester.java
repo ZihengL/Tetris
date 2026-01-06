@@ -16,7 +16,7 @@ public class Tester {
         tetris.shift(Orientations.SOUTH);
         System.out.println("\nSHIFT SOUTH" + tetris);
 
-        // TODO: Rotating right turns the Tetro towards the left and vice-versa.
+
         tetris.rotateRight();
         System.out.println("\nROTATE RIGHT" + tetris);
 

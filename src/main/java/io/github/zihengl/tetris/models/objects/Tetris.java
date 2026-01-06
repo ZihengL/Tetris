@@ -3,13 +3,11 @@ package io.github.zihengl.tetris.models.objects;
 import io.github.zihengl.tetris.models.enums.Orientations;
 import io.github.zihengl.tetris.models.enums.Tetrominos;
 import io.github.zihengl.tetris.models.objects.observer.Observable;
-
-import java.util.Random;
+import io.github.zihengl.tetris.models.services.Rotator;
 
 public class Tetris extends Observable {
 
     public static final int ROW_SCORE = 100;
-    private static final Random randomizer = new Random();
 
     private final Grid grid;
     private Tetromino tetro;
@@ -22,7 +20,7 @@ public class Tetris extends Observable {
         this.grid = new Grid();
 
         Tetrominos[] values = Tetrominos.values();
-        this.queue = values[randomizer.nextInt(values.length)];
+        this.queue = values[(int) (Math.random() * values.length)];
         this.nextTetro();
     }
 
@@ -48,30 +46,39 @@ public class Tetris extends Observable {
         return this.gameover;
     }
 
+    public boolean isValid() {
+        return this.tetro.isValid(this.grid);
+    }
+
     public void addToScore(int points) {
         this.score += points;
     }
 
     // PLAYER CONTROLS
 
-    // TODO: ONLY ROTATE BACK IF NO OTHER CHOICE
     public void rotateRight() {
-        this.tetro.rotateRight();
-
-        if (!this.tetro.isValid(this.grid))
-            this.tetro.rotateLeft();
+        this.rotate(this.tetro::rotateRight, this.tetro::rotateLeft);
     }
 
     public void rotateLeft() {
-        this.tetro.rotateLeft();
-
-        if (!this.tetro.isValid(this.grid))
-            this.tetro.rotateRight();
+        this.rotate(this.tetro::rotateLeft, this.tetro::rotateRight);
     }
 
-    public void drop() {
-        if (this.shift(Orientations.SOUTH))
-            this.drop();
+    public void rotate(Rotator forward, Rotator backwards) {
+        Orientations before = this.tetro.quadrant.getEquivalent();
+        forward.rotate();
+
+        if (!this.isValid()) {
+            Orientations after = this.tetro.quadrant.getEquivalent();
+            for (Point offset : this.tetro.getKickTable(before, after)) {
+                this.tetro.translate(offset);
+                if (!this.isValid())
+                    this.tetro.translate(offset.invert());
+            }
+
+            if (!this.isValid())
+                backwards.rotate();
+        }
     }
 
     public boolean shift(Orientations o) {
@@ -89,6 +96,11 @@ public class Tetris extends Observable {
         return true;
     }
 
+    public void drop() {
+        if (this.shift(Orientations.SOUTH))
+            this.drop();
+    }
+
     // OTHER
 
     public void nextTetro() {
@@ -96,7 +108,7 @@ public class Tetris extends Observable {
         this.tetro = new Tetromino(pivot.x, pivot.y, this.queue);
 
         Tetrominos[] values = Tetrominos.values();
-        this.queue = values[randomizer.nextInt(values.length)];
+        this.queue = values[(int) (Math.random() * values.length)];
     }
 
     public void settleTetro() {
@@ -115,8 +127,8 @@ public class Tetris extends Observable {
     }
 
     public void checkGameover() {
-        for (Cell cell : this.grid.cells[Grid.BUFFER])
-            if (cell.isFilled()) {
+        for (Brick brick : this.grid.bricks[Grid.BUFFER])
+            if (brick.isFilled()) {
                 this.gameover = true;
                 return;
             }
@@ -131,19 +143,8 @@ public class Tetris extends Observable {
                 this.addToScore(ROW_SCORE * multiplier++);
             }
 
-        // TODO: MAKE ROWS THAT ARE HIGHER FALL DOWN AFTERWARDS
+        this.grid.collapse();
     }
-
-//    public String toString() {
-//        StringBuilder msg = new StringBuilder();
-//
-//        msg.append(this.tetro.type).append("\n");
-//        msg.append(this.tetro).append("\n");
-//        for (Brick b : this.tetro.bricks)
-//            msg.append(b).append("\n");
-//
-//        return msg.toString();
-//    }
 
     public String toString() {
         StringBuilder msg = new StringBuilder();

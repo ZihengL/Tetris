@@ -20,12 +20,12 @@ public class Point {
         this.y = p.y;
     }
 
-    // METHODS
-
     public void translate(Point displacement) {
         this.x += displacement.x;
         this.y += displacement.y;
     }
+
+    // OTHER
 
     public Point dotProduct(int scalar) {
         return new Point(this.x * scalar, this.y * scalar);
@@ -33,5 +33,9 @@ public class Point {
 
     public Point add(Point p) {
         return new Point(this.x + p.x, this.y + p.y);
+    }
+
+    public Point invert() {
+        return new Point(-this.x, -this.y);
     }
 }

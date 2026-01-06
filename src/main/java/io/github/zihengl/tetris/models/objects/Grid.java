@@ -5,32 +5,27 @@ public class Grid {
     public static final int WIDTH = 10;
     public static final int HEIGHT = 40;
     public static final int BUFFER = 20;
-    public static final int ANCHOR_X = WIDTH / 2 - 1;
-    public static final int ANCHOR_Y = HEIGHT - 1;
     public static final Point PIVOT_SPAWN = new Point(WIDTH / 2 - 1, HEIGHT - 2);
 
-    public final Cell[][] cells;
+    public final Brick[][] bricks;
 
     public Grid() {
-        this.cells = new Cell[HEIGHT][WIDTH];
+        this.bricks = new Brick[HEIGHT][WIDTH];
         for (int y = 0; y < HEIGHT; y++)
             for (int x = 0; x < WIDTH; x++)
-                this.cells[y][x] = new Cell(x, y);
+                this.bricks[y][x] = new Brick(x, y);
     }
 
-    public Cell get(int x, int y) {
-        return this.cells[y][x];
+    public Brick get(int x, int y) {
+        return this.bricks[y][x];
     }
 
-    public Cell get(Point p) {
-        return this.cells[p.y][p.x];
+    public Brick get(Point p) {
+        return this.bricks[p.y][p.x];
     }
 
     // OTHER
 
-    // TODO: CONSIDER DOING: FOREACH BRICK -> THIS.GET(BRICK) = BRICK;
-    // So to conserve colors for UI
-    // TODO: ALTERNATIVELY, CREATE AN ENUM OF ALL TYPES + EMPTY, AND USE THAT
     public void fill(Point p) {
         this.get(p).fill();
     }
@@ -40,20 +35,30 @@ public class Grid {
     }
 
     public boolean isFilledAt(Point p) {
-        return this.cells[p.y][p.x].isFilled();
+        return this.bricks[p.y][p.x].isFilled();
     }
 
     public boolean isRowFilled(int index) {
-        for (Cell cell : this.cells[index])
-            if (!cell.isFilled())
+        for (Brick brick : this.bricks[index])
+            if (!brick.isFilled())
                 return false;
 
         return true;
     }
 
     public void emptyRow(int index) {
-        for (Cell cell : this.cells[index])
-            cell.empty();
+        for (Brick brick : this.bricks[index])
+            brick.empty();
     }
+    
+    public void collapse() {
+        for (int x = 0; x < Grid.WIDTH; x++)
+            for (int y = 1; y < Grid.HEIGHT; y++) {
+                Brick top = this.bricks[y][x],
+                      bot = this.bricks[y - 1][x];
+                if (top.isFilled() && !bot.isFilled()) {
 
+                }
+            }
+    }
 }

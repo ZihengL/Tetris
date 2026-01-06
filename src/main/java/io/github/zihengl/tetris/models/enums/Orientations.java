@@ -32,4 +32,9 @@ public enum Orientations {
     public boolean isFlipped() {
         return (this.ordinal() + 1) % 2 == 0;
     }
+
+    // Wrapper for Point.add()
+    public Point add(Orientations o) {
+        return this.p.add(o.p);
+    }
 }
