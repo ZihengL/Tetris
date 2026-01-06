@@ -7,7 +7,7 @@ public class Tester {
 
     public static void main(String[] args) {
         Tetris tetris = new Tetris();
-        System.out.println(tetris.getTetro().type);
+        System.out.println(tetris.getTetro().getType());
         System.out.println("\nSPAWN" + tetris);
 
         tetris.shift(Orientations.EAST);

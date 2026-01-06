@@ -4,37 +4,40 @@ import io.github.zihengl.tetris.models.enums.Tetrominos;
 
 public class Brick extends Point {
 
-    private boolean filled; // TODO: CONSIDER CHANGING THIS TO TYPE FOR THE UI BRICK COLOR
     protected Tetrominos type;
 
     public Brick(int x, int y) {
-        this(x, y, false);
+        this(x, y, Tetrominos.EMPTY);
     }
 
-    public Brick(int x, int y, boolean filled) {
+    public Brick(int x, int y, Tetrominos type) {
         super(x, y);
-        this.filled = filled;
+        this.type = type;
     }
 
-    public boolean isFilled() {
-        return this.filled;
+    public Tetrominos getType() {
+        return this.type;
     }
 
-    public void setFilled(boolean filled) {
-        this.filled = filled;
+    public void setType(Tetrominos type) {
+        this.type = type;
     }
 
-    public void fill() {
-        this.filled = true;
-    }
-
-    public void empty() {
-        this.filled = false;
+    public boolean isOccupied() {
+        return !this.type.equals(Tetrominos.EMPTY);
     }
 
     public boolean isOutOfBounds() {
         return this.x < 0 || this.y < 0 ||
             this.x >= Grid.WIDTH || this.y >= Grid.HEIGHT;
+    }
+
+    public void transmitTo(Grid grid) {
+        grid.get(this).transmitFrom(this);
+    }
+
+    public void transmitFrom(Brick brick) {
+        this.type = brick.type;
     }
 
     public String toString() {

@@ -27,8 +27,12 @@ public class Point {
 
     // OTHER
 
-    public Point dotProduct(int scalar) {
+    public Point dotProd(int scalar) {
         return new Point(this.x * scalar, this.y * scalar);
+    }
+
+    public Point componentProd(Point p) {
+        return new Point(this.x * p.x, this.y * p.y);
     }
 
     public Point add(Point p) {

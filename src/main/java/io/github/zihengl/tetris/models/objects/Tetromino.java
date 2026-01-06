@@ -1,44 +1,52 @@
 package io.github.zihengl.tetris.models.objects;
 
 import io.github.zihengl.tetris.models.enums.Orientations;
-import io.github.zihengl.tetris.models.enums.Quadrants;
+import io.github.zihengl.tetris.models.enums.Rotations;
 import io.github.zihengl.tetris.models.enums.Tetrominos;
 
 public class Tetromino extends Brick {
 
-    public final Tetrominos type;
-
     protected Brick[] bricks;
-    protected Quadrants quadrant;
+    protected Orientations orientation;
 
     public Tetromino(int x, int y, Tetrominos type) {
-        super(x, y, true);
-        this.type = type;
+        super(x, y, type);
 
         Point[] offsets = this.type.offsets;
         this.bricks = new Brick[offsets.length];
         for (int i = 0; i < offsets.length; i++)
             this.bricks[i] = new Brick(this.x + offsets[i].x, this.y + offsets[i].y);
 
-        this.quadrant = Quadrants.I;
+        this.orientation = Orientations.NORTH;
     }
 
     public Point getOffset(int index) {
         return this.type.offsets[index];
     }
 
-    public Quadrants getQuadrant() {
-        return this.quadrant;
+    public Orientations getOrientation() {
+        return this.orientation;
+    }
+
+    public void setOrientation(Orientations orientation) {
+        this.orientation = orientation;
+    }
+
+    public void transmitTo(Grid grid) {
+        super.transmitTo(grid);
+
+        for (Brick brick : this.bricks)
+            brick.transmitTo(grid);
     }
 
     // OTHER
 
     public boolean isValid(Grid grid) {
         for (Brick b : this.bricks)
-            if (b.isOutOfBounds() || grid.isFilledAt(b))
+            if (b.isOutOfBounds() || grid.isOccupiedAt(b))
                 return false;
 
-        return !(this.isOutOfBounds() || grid.isFilledAt(this));
+        return !this.isOutOfBounds() && !grid.isOccupiedAt(this);
     }
 
     public void translate(Point displacement) {
@@ -47,38 +55,42 @@ public class Tetromino extends Brick {
         this.update();
     }
 
-    public void rotateRight() {
-        this.quadrant = this.quadrant.previous();
+    public void rotate(Rotations rotation, Grid grid) {
+        for (int i = 0; i < this.bricks.length; i++) {
+            Point rotated = rotation.applyRotation(this.getOffset(i));
+            this.bricks[i].set(rotated);
+        }
 
-        this.update();
+        if (!this.kick(rotation, grid))
+            this.rotate(rotation.invert(), grid);
     }
 
-    public void rotateLeft() {
-        this.quadrant = this.quadrant.next();
+    public boolean kick(Rotations rotation, Grid grid) {
+        for (Point kick : rotation.getKickTable(this.type)) {
+            this.translate(kick);
 
-        this.update();
-    }
+            if (this.isValid(grid)) {
+                this.setOrientation(rotation.after);
+                return true;
+            }
+        }
 
-    public void kick(Grid grid) {
+        return false;
     }
 
     public void update() {
         for (int i = 0; i < this.bricks.length; i++) {
-            Point compensated = this.quadrant.turn(this.getOffset(i));
-            this.bricks[i].set(this.add(compensated));
+            Point location = this.add(this.getOffset(i));
+            this.bricks[i].set(location);
         }
     }
 
-    // TEMPORARY
+    // TEMPORARY FOR CONSOLE TESTING
     public boolean isAt(int x, int y) {
         for (Brick brick : this.bricks)
             if (brick.x == x && brick.y == y)
                 return true;
 
         return this.x == x && this.y == y;
-    }
-
-    public Point[] getKickTable(Orientations before, Orientations after) {
-        return this.type.kicks.getTable(before, after);
     }
 }

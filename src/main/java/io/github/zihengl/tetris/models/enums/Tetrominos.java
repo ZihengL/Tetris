@@ -10,7 +10,8 @@ public enum Tetrominos {
     T(new Point[] { new Point(-1, 0), new Point(0, 1), new Point(1, 0) }, KickTables.A),
     Z(new Point[] { new Point(-1, 1), new Point(0, 1), new Point(1, 0) }, KickTables.A),
     I(new Point[] { new Point(0, -2), new Point(0, -1), new Point(0, 1) }, KickTables.B),
-    O(new Point[] { new Point(1, 0), new Point(0, 1), new Point(1, 1) }, KickTables.C);
+    O(new Point[] { new Point(1, 0), new Point(0, 1), new Point(1, 1) }, KickTables.C),
+    EMPTY(new Point[] { }, KickTables.C);
 
     public final Point[] offsets;
     public final KickTables kicks;

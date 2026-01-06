@@ -1,5 +1,7 @@
 package io.github.zihengl.tetris.models.objects;
 
+import io.github.zihengl.tetris.models.enums.Tetrominos;
+
 public class Grid {
 
     public static final int WIDTH = 10;
@@ -26,21 +28,13 @@ public class Grid {
 
     // OTHER
 
-    public void fill(Point p) {
-        this.get(p).fill();
-    }
-
-    public void empty(Point p) {
-        this.get(p).empty();
-    }
-
-    public boolean isFilledAt(Point p) {
-        return this.bricks[p.y][p.x].isFilled();
+    public boolean isOccupiedAt(Point p) {
+        return this.bricks[p.y][p.x].isOccupied();
     }
 
     public boolean isRowFilled(int index) {
         for (Brick brick : this.bricks[index])
-            if (!brick.isFilled())
+            if (!brick.isOccupied())
                 return false;
 
         return true;
@@ -48,17 +42,16 @@ public class Grid {
 
     public void emptyRow(int index) {
         for (Brick brick : this.bricks[index])
-            brick.empty();
+            brick.setType(Tetrominos.EMPTY);
     }
     
-    public void collapse() {
+    public void collapseFrom(int row) {
         for (int x = 0; x < Grid.WIDTH; x++)
-            for (int y = 1; y < Grid.HEIGHT; y++) {
-                Brick top = this.bricks[y][x],
-                      bot = this.bricks[y - 1][x];
-                if (top.isFilled() && !bot.isFilled()) {
+            for (int y = row; y < Grid.BUFFER; y++) {
+                Brick brick = this.bricks[y][x],
+                      top = this.bricks[y + 1][x];
 
-                }
+                brick.transmitFrom(top);
             }
     }
 }

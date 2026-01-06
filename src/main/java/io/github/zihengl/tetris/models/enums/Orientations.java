@@ -9,32 +9,25 @@ public enum Orientations {
     SOUTH(new Point(0, -1)),
     EAST(new Point(1, 0));
 
-    public final Point p;
+    public final Point unit;
 
-    private Orientations(Point p) {
-        this.p = p;
+    private Orientations(Point unit) {
+        this.unit = unit;
     }
 
-    public Orientations rotateRight() {
-        Orientations[] values = Orientations.values();
-        return this.equals(NORTH) ? EAST : values[this.ordinal() - 1];
+    public Orientations next() {
+        return this.equals(NORTH) ? EAST : values()[this.ordinal() + 1];
     }
 
-    public Orientations rotateLeft() {
-        Orientations[] values = Orientations.values();
-        return this.equals(EAST) ? NORTH : values[this.ordinal() + 1];
+    public Orientations previous() {
+        return this.equals(EAST) ? NORTH : values()[this.ordinal() - 1];
     }
 
     public Orientations opposite() {
-        return this.rotateRight().rotateRight();
+        return this.next().next();
     }
 
     public boolean isFlipped() {
         return (this.ordinal() + 1) % 2 == 0;
-    }
-
-    // Wrapper for Point.add()
-    public Point add(Orientations o) {
-        return this.p.add(o.p);
     }
 }
