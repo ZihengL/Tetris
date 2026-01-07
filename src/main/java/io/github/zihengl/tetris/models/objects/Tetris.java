@@ -1,11 +1,9 @@
 package io.github.zihengl.tetris.models.objects;
 
-import io.github.zihengl.tetris.models.enums.KickTables;
 import io.github.zihengl.tetris.models.enums.Orientations;
 import io.github.zihengl.tetris.models.enums.Rotations;
 import io.github.zihengl.tetris.models.enums.Tetrominos;
 import io.github.zihengl.tetris.models.objects.observer.Observable;
-import io.github.zihengl.tetris.models.services.Rotator;
 
 public class Tetris extends Observable {
 
@@ -70,20 +68,6 @@ public class Tetris extends Observable {
         this.tetro.rotate(rotation, this.grid);
     }
 
-//    public void rotate(Rotator forward, Rotator backwards) {
-//        Rotations rotation = forward.rotate();
-//        if (this.isValid()) return;
-//
-//        Tetrominos type = this.tetro.getType();
-//        for (Point offset : rotation.getKickTable(type)) {
-//            this.tetro.translate(offset);
-//            if (this.isValid()) return;
-//
-//            this.tetro.translate(offset.invert());
-//        }
-//        backwards.rotate();
-//    }
-
     public boolean shift(Orientations o) {
         this.tetro.translate(o.unit);
 
@@ -107,8 +91,9 @@ public class Tetris extends Observable {
     // OTHER
 
     public void nextTetro() {
-        Point pivot = Grid.PIVOT_SPAWN;
-        this.tetro = new Tetromino(pivot.x, pivot.y, this.queue);
+        Point spawn = Grid.PIVOT_SPAWN;
+        this.tetro = new Tetromino(spawn.x, spawn.y, this.queue);
+        this.tetro = new Tetromino(spawn.x, spawn.y, Tetrominos.T);
 
         Tetrominos[] values = Tetrominos.values();
         this.queue = values[(int) (Math.random() * values.length)];
@@ -129,7 +114,7 @@ public class Tetris extends Observable {
 
     public void checkGameover() {
         for (Brick brick : this.grid.bricks[Grid.BUFFER])
-            if (!brick.isOccupied()) {
+            if (!brick.isFilled()) {
                 this.gameover = true;
                 return;
             }
@@ -154,7 +139,7 @@ public class Tetris extends Observable {
             msg.append("\n");
 
             for (int x = 0; x < Grid.WIDTH; x++) {
-                String value = this.grid.get(x, y).isOccupied() ? "1" : "0";
+                String value = this.grid.get(x, y).isFilled() ? "1" : "-";
                 value = this.tetro.isAt(x, y) ? "2" : value;
 
                 msg.append(value).append("\t");

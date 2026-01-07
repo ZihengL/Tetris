@@ -23,7 +23,8 @@ public class Brick extends Point {
         this.type = type;
     }
 
-    public boolean isOccupied() {
+    // Returns true if type != EMPTY
+    public boolean isFilled() {
         return !this.type.equals(Tetrominos.EMPTY);
     }
 

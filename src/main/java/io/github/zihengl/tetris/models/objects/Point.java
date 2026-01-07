@@ -27,19 +27,25 @@ public class Point {
 
     // OTHER
 
-    public Point dotProd(int scalar) {
-        return new Point(this.x * scalar, this.y * scalar);
-    }
-
-    public Point componentProd(Point p) {
-        return new Point(this.x * p.x, this.y * p.y);
-    }
-
     public Point add(Point p) {
         return new Point(this.x + p.x, this.y + p.y);
     }
 
+    // Returns point with flipped x/y values.
     public Point invert() {
+        return new Point(this.y, this.x);
+    }
+
+    // Returns point with negative x/y values.
+    public Point opposite() {
         return new Point(-this.x, -this.y);
+    }
+
+    public Point dotProduct(int mag) {
+        return new Point(this.x * mag, this.y * mag);
+    }
+
+    public Point compProduct(Point mag) {
+        return new Point(this.x * mag.x, this.y * mag.y);
     }
 }

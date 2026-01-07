@@ -28,13 +28,13 @@ public class Grid {
 
     // OTHER
 
-    public boolean isOccupiedAt(Point p) {
-        return this.bricks[p.y][p.x].isOccupied();
+    public boolean isFilledAt(Point p) {
+        return this.bricks[p.y][p.x].isFilled();
     }
 
     public boolean isRowFilled(int index) {
         for (Brick brick : this.bricks[index])
-            if (!brick.isOccupied())
+            if (!brick.isFilled())
                 return false;
 
         return true;

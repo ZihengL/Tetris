@@ -16,12 +16,9 @@ public enum Rotations {
     public final Orientations before;
     public final Orientations after;
 
-    public final Point multiplier;
-
     private Rotations(Orientations before, Orientations after) {
         this.before = before;
         this.after = after;
-        this.multiplier = before.unit.add(after.unit);
     }
 
     public Rotations next() {
@@ -40,11 +37,11 @@ public enum Rotations {
         return this.previous();
     }
 
-    public Point applyRotation(Point p) {
+    public Point applyRotation(Point offset) {
         if (this.after.isFlipped())
-            return p.invert().componentProd(this.multiplier);
+            return offset.invert().compProduct(after.quadrant);
 
-        return p.componentProd(this.multiplier);
+        return offset.compProduct(after.quadrant);
     }
 
     public Point[] getKickTable(Tetrominos type) {

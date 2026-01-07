@@ -15,7 +15,7 @@ public class Tetromino extends Brick {
         Point[] offsets = this.type.offsets;
         this.bricks = new Brick[offsets.length];
         for (int i = 0; i < offsets.length; i++)
-            this.bricks[i] = new Brick(this.x + offsets[i].x, this.y + offsets[i].y);
+            this.bricks[i] = new Brick(this.x + offsets[i].x, this.y + offsets[i].y, this.type);
 
         this.orientation = Orientations.NORTH;
     }
@@ -43,22 +43,25 @@ public class Tetromino extends Brick {
 
     public boolean isValid(Grid grid) {
         for (Brick b : this.bricks)
-            if (b.isOutOfBounds() || grid.isOccupiedAt(b))
+            if (b.isOutOfBounds() || grid.isFilledAt(b))
                 return false;
 
-        return !this.isOutOfBounds() && !grid.isOccupiedAt(this);
+        return !this.isOutOfBounds() && !grid.isFilledAt(this);
     }
 
     public void translate(Point displacement) {
         super.translate(displacement);
-
-        this.update();
+        for (Brick brick : this.bricks)
+            brick.translate(displacement);
     }
 
     public void rotate(Rotations rotation, Grid grid) {
         for (int i = 0; i < this.bricks.length; i++) {
-            Point rotated = rotation.applyRotation(this.getOffset(i));
-            this.bricks[i].set(rotated);
+            Point offset = this.getOffset(i),
+                  rotatedOffset = rotation.applyRotation(offset),
+                  location = this.add(rotatedOffset);
+
+            this.bricks[i].set(location);
         }
 
         if (!this.kick(rotation, grid))
@@ -73,17 +76,19 @@ public class Tetromino extends Brick {
                 this.setOrientation(rotation.after);
                 return true;
             }
+
+            this.translate(kick.opposite());
         }
 
         return false;
     }
 
-    public void update() {
-        for (int i = 0; i < this.bricks.length; i++) {
-            Point location = this.add(this.getOffset(i));
-            this.bricks[i].set(location);
-        }
-    }
+//    public void update() {
+//        for (int i = 0; i < this.bricks.length; i++) {
+//            Point location = this.add(this.getOffset(i));
+//            this.bricks[i].set(location);
+//        }
+//    }
 
     // TEMPORARY FOR CONSOLE TESTING
     public boolean isAt(int x, int y) {
