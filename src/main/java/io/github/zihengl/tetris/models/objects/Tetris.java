@@ -50,8 +50,19 @@ public class Tetris extends Observable {
         return this.score;
     }
 
+    public Gamestates getState() {
+        return this.state;
+    }
+
     public void setGamestate(Gamestates state) {
         this.state = state;
+    }
+
+    public Tetros getTypeAt(int x, int y) {
+        if (this.tetro.isAt(x, y))
+            return this.tetro.type;
+
+        return this.grid.get(x, y).type;
     }
 
     // VALIDATION
@@ -66,6 +77,11 @@ public class Tetris extends Observable {
 
     // PLAYER CONTROLS
 
+    /**
+     * Determines Tetro's rotation type based on the current value of
+     * its orientation, and the return value of its previous() method,
+     * then invokes the rotate() method with the rotation in parameter.
+     */
     public void rotateRight() {
         Orientations before = this.tetro.getOrientation(),
                      after = before.previous();
@@ -74,6 +90,11 @@ public class Tetris extends Observable {
         this.tetro.rotate(rotation, this.grid);
     }
 
+    /**
+     * Determines Tetro's rotation type based on the current value of
+     * its orientation, and the return value of its next() method,
+     * then invokes the rotate() method with the rotation in parameter.
+     */
     public void rotateLeft() {
         Orientations before = this.tetro.getOrientation(),
                      after = before.next();
@@ -89,7 +110,7 @@ public class Tetris extends Observable {
             this.tetro.translate(o.opposite().unit);
 
             if (o.equals(Orientations.SOUTH)) {
-                this.settleTetro();
+                this.transmitTetro();
                 return false;
             }
         }
@@ -105,9 +126,9 @@ public class Tetris extends Observable {
     // OTHER
 
     /**
-     * Template method called upon whenever the Tetro 
+     * Template method called upon whenever the current Tetro gets transferred to the Grid.
      */
-    public void settleTetro() {
+    public void transmitTetro() {
         this.tetro.transmitTo(this.grid);
 
         this.checkGameover();
@@ -129,6 +150,7 @@ public class Tetris extends Observable {
 
         for (int i = 0; i < Grid.BUFFER; i++)
             if (this.grid.isRowFilled(i)) {
+                // TODO: REMOVE ROW BEFORE COLLAPSING - TO SHOW ANIMATION
                 this.grid.collapseFrom(i);
                 score += CLEAR_POINTS;
             }
@@ -143,8 +165,9 @@ public class Tetris extends Observable {
     public void nextTetro() {
         if (this.isGameover()) return;
 
+        Tetros[] tetros = Tetros.values();
         this.tetro = new Tetro(Grid.SPAWN.x, Grid.SPAWN.y, this.queue);
-        this.queue = Tetros.values()[(int) (Math.random() * Tetros.values().length - 1)];
+        this.queue = tetros[(int) (Math.random() * tetros.length - 1)];
     }
 
     // For console testing
@@ -159,9 +182,9 @@ public class Tetris extends Observable {
 
             for (int x = 0; x < this.grid.width(y); x++, msg.append("\t"))
                 if (this.tetro.isAt(x, y))
-                    msg.append("0");
+                    msg.append(0);
                 else if (this.grid.get(x, y).isFilled())
-                    msg.append("1");
+                    msg.append(1);
                 else
                     msg.append(filler);
         }

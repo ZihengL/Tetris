@@ -17,20 +17,19 @@ import javafx.util.Duration;
 
 public class MainController {
 
-    public GridPane gridpane;
     @FXML private StackPane stacks;
 
-    private double time;
 
     public VBox mainpane;
+
+    Tetris tetris = new Tetris();
+    private double time;
 
     @FXML
     private void initialize() {
         this.mainpane.setOnMouseClicked(mouseEvent -> {
             this.mainpane.requestFocus();
         });
-
-        Tetris tetris = new Tetris();
 
         // NOTE: SHIFT CONTROLS
         Shifter shifter = tetris::shift;
@@ -57,8 +56,12 @@ public class MainController {
         // NOTE: USE STACKPANE TO SHOW MENU WHEN PAUSED
         // TOGGLE BETWEEN GAMESTATES FOR PAUSING
 
-        // NOTE: FOR CONSOLE TESTING
+    }
+
+    // NOTE: FOR CONSOLE TESTING
+    public void startConsoleTestPlay() {
         this.time = 0;
+
         Timeline timeline = new Timeline(
                 new KeyFrame(Duration.seconds(0.1), event -> {
                     this.time += 0.1;

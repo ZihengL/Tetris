@@ -1,5 +1,6 @@
 package io.github.zihengl.tetris.models.objects;
 
+import io.github.zihengl.tetris.models.services.Callbacker;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.scene.text.Text;
@@ -13,17 +14,22 @@ import javafx.util.Duration;
 public class Timer {
 
     private final Timeline timeline;
+    private final Callbacker updater;
 
-    private int time;
+    private int time = 0;
 
-    public Timer() {
+    public Timer(Callbacker updater) {
+        this.updater = updater;
+
         this.timeline = new Timeline(
                 new KeyFrame(Duration.seconds(this.getSpeed()), event -> {
-                    // TODO:
+                    if (++this.time != 5) return;
+
+                    this.updater.callback();
+                    this.time = 0;
                 })
         );
         this.timeline.setCycleCount(Timeline.INDEFINITE);
-        this.time = 0;
     }
 
     public double getSpeed() {

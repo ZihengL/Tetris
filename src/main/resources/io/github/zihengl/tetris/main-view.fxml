@@ -13,14 +13,8 @@
         <Insets bottom="20.0" left="20.0" right="20.0" top="20.0"/>
     </padding>
 
-<!--    <StackPane>-->
-<!--        &lt;!&ndash;MENU CONTROLLER&ndash;&gt;-->
-<!--        &lt;!&ndash;TETRIS CONTROLLER&ndash;&gt;-->
-<!--        <GridPane fx:id="gridpane">-->
-
-<!--        </GridPane>-->
-<!--    </StackPane>-->
     <StackPane fx:id="stacks">
-
+        <fx:include source="menu-view.fxml" visible="false"/>
+        <fx:include source="game-view.fxml"/>
     </StackPane>
 </VBox>

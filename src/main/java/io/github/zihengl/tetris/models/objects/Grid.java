@@ -1,6 +1,7 @@
 package io.github.zihengl.tetris.models.objects;
 
 import io.github.zihengl.tetris.models.enums.Tetros;
+import io.github.zihengl.tetris.models.observer.Observable;
 
 /**
  * @author Zi
@@ -41,6 +42,12 @@ public class Grid {
 
     // OTHER
 
+    public void reset() {
+        for (int y = 0; y < this.height(); y++)
+            this.emptyRow(y);
+    }
+
+
     public boolean isFilledAt(Point point) {
         return this.bricks[point.y][point.x].isFilled();
     }
@@ -67,13 +74,12 @@ public class Grid {
 //                brick.transmitFrom(top);
 //            }
 
-        for (int y = row; y < this.bricks.length; y++) {
-            for (int x = 0; x < this.bricks[y].length; x++) {
+        for (int y = row; y < this.height(); y++)
+            for (int x = 0; x < this.width(y); x++) {
                 Brick bot = this.bricks[y][x],
                       top = this.bricks[y + 1][x];
 
                 bot.transmitFrom(top);
             }
-        }
     }
 }
