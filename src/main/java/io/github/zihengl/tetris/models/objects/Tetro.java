@@ -4,6 +4,10 @@ import io.github.zihengl.tetris.models.enums.Orientations;
 import io.github.zihengl.tetris.models.enums.Rotations;
 import io.github.zihengl.tetris.models.enums.Tetros;
 
+/**
+ * @author Zi
+ * @date 1/8/2026
+ */
 
 public class Tetro extends Brick {
 
@@ -15,8 +19,10 @@ public class Tetro extends Brick {
 
         Point[] offsets = this.type.offsets;
         this.bricks = new Brick[offsets.length];
-        for (int i = 0; i < offsets.length; i++)
-            this.bricks[i] = new Brick(x + offsets[i].x, y + offsets[i].y, type);
+        for (int i = 0; i < offsets.length; i++) {
+            Point offset = offsets[i];
+            this.bricks[i] = new Brick(x + offset.x, y + offset.y, type);
+        }
 
         this.orientation = Orientations.NORTH;
     }

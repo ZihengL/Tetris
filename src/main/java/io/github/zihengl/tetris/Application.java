@@ -6,6 +6,11 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 
+/**
+ * @author Zi
+ * @date 1/8/2026
+ */
+
 public class Application extends javafx.application.Application {
     @Override
     public void start(Stage stage) throws IOException {

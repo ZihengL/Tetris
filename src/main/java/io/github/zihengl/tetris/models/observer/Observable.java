@@ -1,4 +1,4 @@
-package io.github.zihengl.tetris.models.objects.observer;
+package io.github.zihengl.tetris.models.observer;
 
 import java.util.ArrayList;
 import java.util.List;

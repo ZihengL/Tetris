@@ -1,13 +1,9 @@
 package io.github.zihengl.tetris.controllers;
 
-import io.github.zihengl.tetris.controllers.commands.controls.DropCommand;
-import io.github.zihengl.tetris.controllers.commands.controls.RotateCommand;
-import io.github.zihengl.tetris.controllers.commands.controls.ShiftKeys;
-import io.github.zihengl.tetris.controllers.commands.controls.ShiftCommand;
+import io.github.zihengl.tetris.controllers.commands.controls.*;
 import io.github.zihengl.tetris.models.enums.Orientations;
 import io.github.zihengl.tetris.models.objects.Tetris;
-import io.github.zihengl.tetris.models.services.Dropper;
-import io.github.zihengl.tetris.models.services.Rotator;
+import io.github.zihengl.tetris.models.services.Callbacker;
 import io.github.zihengl.tetris.models.services.Shifter;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
@@ -15,16 +11,17 @@ import javafx.fxml.FXML;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.util.Duration;
 
 public class MainController {
 
     public GridPane gridpane;
+    @FXML private StackPane stacks;
 
     private double time;
 
-//    public Tetris tetris = Tetris.tetris;
     public VBox mainpane;
 
     @FXML
@@ -35,26 +32,26 @@ public class MainController {
 
         Tetris tetris = new Tetris();
 
-        // NOTE: TRANSLATION CONTROLS
+        // NOTE: SHIFT CONTROLS
         Shifter shifter = tetris::shift;
         for (ShiftKeys key : ShiftKeys.values())
             this.mainpane.addEventHandler(KeyEvent.KEY_PRESSED,
                                 new ShiftCommand(key, shifter));
 
         // NOTE: ROTATION CONTROLS
-        Rotator leftRotator = tetris::rotateLeft,
-                rightRotator = tetris::rotateRight;
+        Callbacker leftRotator = tetris::rotateLeft,
+                   rightRotator = tetris::rotateRight;
         this.mainpane.addEventHandler(KeyEvent.KEY_PRESSED,
-                                new RotateCommand(KeyCode.Z, leftRotator));
+                                new KeyEventCommand(KeyCode.Z, leftRotator));
         this.mainpane.addEventHandler(KeyEvent.KEY_PRESSED,
-                                new RotateCommand(KeyCode.X, rightRotator));
+                                new KeyEventCommand(KeyCode.X, rightRotator));
         this.mainpane.addEventHandler(KeyEvent.KEY_PRESSED,
-                                new RotateCommand(KeyCode.UP, rightRotator));
+                                new KeyEventCommand(KeyCode.UP, rightRotator));
 
         // NOTE: DROP CONTROLS
-        Dropper dropper = tetris::drop;
+        Callbacker dropper = tetris::drop;
         this.mainpane.addEventHandler(KeyEvent.KEY_PRESSED,
-                                new DropCommand(KeyCode.SPACE, dropper));
+                                new KeyEventCommand(KeyCode.SPACE, dropper));
 
         // TODO: ADD PAUSE BUTTON IN THE FUTURE
         // NOTE: USE STACKPANE TO SHOW MENU WHEN PAUSED

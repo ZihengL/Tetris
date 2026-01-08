@@ -1,14 +1,17 @@
 package io.github.zihengl.tetris.models.objects;
 
-import io.github.zihengl.tetris.models.enums.Gamestate;
+import io.github.zihengl.tetris.models.enums.Gamestates;
 import io.github.zihengl.tetris.models.enums.Orientations;
 import io.github.zihengl.tetris.models.enums.Rotations;
 import io.github.zihengl.tetris.models.enums.Tetros;
-import io.github.zihengl.tetris.models.objects.observer.Observable;
+import io.github.zihengl.tetris.models.observer.Observable;
+
+/**
+ * @author Zi
+ * @date 1/8/2026
+ */
 
 public class Tetris extends Observable {
-
-//    public static final Tetris tetris = new Tetris();
 
     public static final int CLEAR_POINTS = 100;
 
@@ -17,7 +20,9 @@ public class Tetris extends Observable {
     private Tetros queue;
 
     private int score = 0;
-    private Gamestate state = Gamestate.ONGOING;
+    private Gamestates state = Gamestates.ONGOING;
+
+    private Timer timer;
 
     public Tetris() {
         this.grid = new Grid();
@@ -45,7 +50,7 @@ public class Tetris extends Observable {
         return this.score;
     }
 
-    public void setState(Gamestate state) {
+    public void setGamestate(Gamestates state) {
         this.state = state;
     }
 
@@ -56,7 +61,7 @@ public class Tetris extends Observable {
     }
 
     public boolean isGameover() {
-        return this.state.equals(Gamestate.GAMEOVER);
+        return this.state.equals(Gamestates.GAMEOVER);
     }
 
     // PLAYER CONTROLS
@@ -99,24 +104,22 @@ public class Tetris extends Observable {
 
     // OTHER
 
-    // UPDATE
-
-    public void update() {
-        // TODO: PUT UPDATE STUFF HERE
-    }
-
+    /**
+     * Template method called upon whenever the Tetro 
+     */
     public void settleTetro() {
         this.tetro.transmitTo(this.grid);
 
         this.checkGameover();
         this.checkScore();
+
         this.nextTetro();
     }
 
     public void checkGameover() {
         for (Brick brick : this.grid.bricks[Grid.BUFFER])
             if (brick.isFilled()) {
-                this.setState(Gamestate.GAMEOVER);
+                this.setGamestate(Gamestates.GAMEOVER);
                 return;
             }
     }
@@ -129,9 +132,14 @@ public class Tetris extends Observable {
                 this.grid.collapseFrom(i);
                 score += CLEAR_POINTS;
             }
+
         this.score += score;
     }
 
+    /**
+     * If current Gamestate isn't GAMEOVER, then creates a new Tetro
+     * object of the type in queue.
+     */
     public void nextTetro() {
         if (this.isGameover()) return;
 
@@ -142,18 +150,20 @@ public class Tetris extends Observable {
     // For console testing
     public String toString() {
         StringBuilder msg = new StringBuilder();
+        msg.append("\n");
 
         if (this.isGameover()) return "GAME OVER";
 
-        for (int y = Grid.HEIGHT - 1; y >= 0; y--) {
-            msg.append("\n");
+        for (int y = this.grid.height() - 1; y >= 0; y--, msg.append("\n")) {
+            String filler = y == Grid.BUFFER ? "=" : "-";
 
-            for (int x = 0; x < Grid.WIDTH; x++) {
-                String value = this.grid.get(x, y).isFilled() ? "1" : "-";
-                value = this.tetro.isAt(x, y) ? "2" : value;
-
-                msg.append(value).append("\t");
-            }
+            for (int x = 0; x < this.grid.width(y); x++, msg.append("\t"))
+                if (this.tetro.isAt(x, y))
+                    msg.append("0");
+                else if (this.grid.get(x, y).isFilled())
+                    msg.append("1");
+                else
+                    msg.append(filler);
         }
 
         return msg.toString();

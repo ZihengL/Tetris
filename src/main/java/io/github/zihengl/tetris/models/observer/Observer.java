@@ -1,4 +1,4 @@
-package io.github.zihengl.tetris.models.objects.observer;
+package io.github.zihengl.tetris.models.observer;
 
 public interface Observer {
 

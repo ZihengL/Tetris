@@ -1,5 +1,7 @@
 package io.github.zihengl.tetris.controllers;
 
+import javafx.fxml.FXML;
+
 /**
  * @author Zi
  * @date 1/7/2026
@@ -7,4 +9,8 @@ package io.github.zihengl.tetris.controllers;
 
 public class TetrisController {
 
+    @FXML
+    private void initialize() {
+
+    }
 }

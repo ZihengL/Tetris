@@ -2,6 +2,11 @@ package io.github.zihengl.tetris.models.objects;
 
 import io.github.zihengl.tetris.models.enums.Tetros;
 
+/**
+ * @author Zi
+ * @date 1/8/2026
+ */
+
 public class Brick extends Point {
 
     protected Tetros type;

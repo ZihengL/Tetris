@@ -1,5 +1,10 @@
 package io.github.zihengl.tetris.models.objects;
 
+/**
+ * @author Zi
+ * @date 1/8/2026
+ */
+
 public class Point {
 
     public int x;
@@ -10,14 +15,9 @@ public class Point {
         this.y = y;
     }
 
-    public void set(int x, int y) {
-        this.x = x;
-        this.y = y;
-    }
-
-    public void set(Point p) {
-        this.x = p.x;
-        this.y = p.y;
+    public void set(Point location) {
+        this.x = location.x;
+        this.y = location.y;
     }
 
     public void translate(Point displacement) {
@@ -27,8 +27,8 @@ public class Point {
 
     // OTHER
 
-    public Point add(Point p) {
-        return new Point(this.x + p.x, this.y + p.y);
+    public Point add(Point other) {
+        return new Point(this.x + other.x, this.y + other.y);
     }
 
     /**
@@ -45,6 +45,10 @@ public class Point {
         return new Point(-this.x, -this.y);
     }
 
+    /**
+     * @param scalar defines the scale, or magnitude of the operation
+     * @return new Point after multiplying
+     */
     public Point dotProduct(int scalar) {
         return new Point(this.x * scalar, this.y * scalar);
     }

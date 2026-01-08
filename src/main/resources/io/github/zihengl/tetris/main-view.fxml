@@ -3,6 +3,7 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.layout.VBox?>
 
+<?import javafx.scene.layout.StackPane?>
 <VBox alignment="CENTER" spacing="20.0" xmlns:fx="http://javafx.com/fxml"
       fx:controller="io.github.zihengl.tetris.controllers.MainController"
       fx:id="mainpane"
@@ -19,4 +20,7 @@
 
 <!--        </GridPane>-->
 <!--    </StackPane>-->
+    <StackPane fx:id="stacks">
+
+    </StackPane>
 </VBox>
