@@ -1,26 +1,29 @@
 package io.github.zihengl.tetris.models.objects;
 
+import io.github.zihengl.tetris.models.enums.Gamestate;
 import io.github.zihengl.tetris.models.enums.Orientations;
 import io.github.zihengl.tetris.models.enums.Rotations;
-import io.github.zihengl.tetris.models.enums.Tetrominos;
+import io.github.zihengl.tetris.models.enums.Tetros;
 import io.github.zihengl.tetris.models.objects.observer.Observable;
 
 public class Tetris extends Observable {
 
+//    public static final Tetris tetris = new Tetris();
+
     public static final int CLEAR_POINTS = 100;
 
     private final Grid grid;
-    private Tetromino tetro;
-    private Tetrominos queue;
+    private Tetro tetro;
+    private Tetros queue;
 
     private int score = 0;
-    private boolean gameover = false;
+    private Gamestate state = Gamestate.ONGOING;
 
     public Tetris() {
         this.grid = new Grid();
 
-        Tetrominos[] values = Tetrominos.values();
-        this.queue = values[(int) (Math.random() * values.length)];
+        Tetros[] values = Tetros.values();
+        this.queue = values[(int) (Math.random() * values.length - 1)];
         this.nextTetro();
     }
 
@@ -30,11 +33,11 @@ public class Tetris extends Observable {
         return this.grid;
     }
 
-    public Tetromino getTetro() {
+    public Tetro getTetro() {
         return this.tetro;
     }
 
-    public Tetrominos getQueue() {
+    public Tetros getQueue() {
         return this.queue;
     }
 
@@ -42,12 +45,18 @@ public class Tetris extends Observable {
         return this.score;
     }
 
-    public boolean isGameover() {
-        return this.gameover;
+    public void setState(Gamestate state) {
+        this.state = state;
     }
+
+    // VALIDATION
 
     public boolean isValid() {
         return this.tetro.isValid(this.grid);
+    }
+
+    public boolean isGameover() {
+        return this.state.equals(Gamestate.GAMEOVER);
     }
 
     // PLAYER CONTROLS
@@ -90,50 +99,51 @@ public class Tetris extends Observable {
 
     // OTHER
 
-    public void nextTetro() {
-        Point spawn = Grid.PIVOT_SPAWN;
-        this.tetro = new Tetromino(spawn.x, spawn.y, this.queue);
-        this.tetro = new Tetromino(spawn.x, spawn.y, Tetrominos.T);
+    // UPDATE
 
-        Tetrominos[] values = Tetrominos.values();
-        this.queue = values[(int) (Math.random() * values.length)];
+    public void update() {
+        // TODO: PUT UPDATE STUFF HERE
     }
 
     public void settleTetro() {
         this.tetro.transmitTo(this.grid);
 
-        this.check();
-        if (!this.gameover)
-            this.nextTetro();
-    }
-
-    public void check() {
         this.checkGameover();
         this.checkScore();
+        this.nextTetro();
     }
 
     public void checkGameover() {
         for (Brick brick : this.grid.bricks[Grid.BUFFER])
-            if (!brick.isFilled()) {
-                this.gameover = true;
+            if (brick.isFilled()) {
+                this.setState(Gamestate.GAMEOVER);
                 return;
             }
     }
 
     public void checkScore() {
-        int multiplier = 1;
+        int score = 0;
 
         for (int i = 0; i < Grid.BUFFER; i++)
             if (this.grid.isRowFilled(i)) {
                 this.grid.collapseFrom(i);
-                multiplier++;
+                score += CLEAR_POINTS;
             }
-        this.score += multiplier * Tetris.CLEAR_POINTS;
+        this.score += score;
+    }
+
+    public void nextTetro() {
+        if (this.isGameover()) return;
+
+        this.tetro = new Tetro(Grid.SPAWN.x, Grid.SPAWN.y, this.queue);
+        this.queue = Tetros.values()[(int) (Math.random() * Tetros.values().length - 1)];
     }
 
     // For console testing
     public String toString() {
         StringBuilder msg = new StringBuilder();
+
+        if (this.isGameover()) return "GAME OVER";
 
         for (int y = Grid.HEIGHT - 1; y >= 0; y--) {
             msg.append("\n");

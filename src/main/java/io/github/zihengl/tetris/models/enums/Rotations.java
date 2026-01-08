@@ -39,12 +39,12 @@ public enum Rotations {
 
     public Point applyRotation(Point offset) {
         if (this.after.isFlipped())
-            return offset.invert().compProduct(after.quadrant);
+            return offset.flip().compProduct(after.quadrant);
 
         return offset.compProduct(after.quadrant);
     }
 
-    public Point[] getKickTable(Tetrominos type) {
+    public Point[] getKickTable(Tetros type) {
         if (type.kicks.equals(KickTables.C))
             return new Point[0];
 

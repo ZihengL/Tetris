@@ -2,20 +2,21 @@ package io.github.zihengl.tetris.models.objects;
 
 import io.github.zihengl.tetris.models.enums.Orientations;
 import io.github.zihengl.tetris.models.enums.Rotations;
-import io.github.zihengl.tetris.models.enums.Tetrominos;
+import io.github.zihengl.tetris.models.enums.Tetros;
 
-public class Tetromino extends Brick {
+
+public class Tetro extends Brick {
 
     protected Brick[] bricks;
     protected Orientations orientation;
 
-    public Tetromino(int x, int y, Tetrominos type) {
+    public Tetro(int x, int y, Tetros type) {
         super(x, y, type);
 
         Point[] offsets = this.type.offsets;
         this.bricks = new Brick[offsets.length];
         for (int i = 0; i < offsets.length; i++)
-            this.bricks[i] = new Brick(this.x + offsets[i].x, this.y + offsets[i].y, this.type);
+            this.bricks[i] = new Brick(x + offsets[i].x, y + offsets[i].y, type);
 
         this.orientation = Orientations.NORTH;
     }
@@ -41,20 +42,21 @@ public class Tetromino extends Brick {
 
     // OTHER
 
-    public boolean isValid(Grid grid) {
-        for (Brick b : this.bricks)
-            if (b.isOutOfBounds() || grid.isFilledAt(b))
-                return false;
-
-        return !this.isOutOfBounds() && !grid.isFilledAt(this);
-    }
-
     public void translate(Point displacement) {
         super.translate(displacement);
         for (Brick brick : this.bricks)
             brick.translate(displacement);
     }
 
+    /**
+     * Gets the matching offset of each dependent Brick,
+     * and applies the rotation before translating by
+     * this Tetro's x/y values. Then, if kick() returns
+     * false, then rotate back to its original position.
+     *
+     * @param rotation The Orientations before/after the operation
+     * @param grid The grid used to validate the rotation
+     */
     public void rotate(Rotations rotation, Grid grid) {
         for (int i = 0; i < this.bricks.length; i++) {
             Point offset = this.getOffset(i),
@@ -68,6 +70,13 @@ public class Tetromino extends Brick {
             this.rotate(rotation.invert(), grid);
     }
 
+    /**
+     *
+     *
+     * @param rotation The Orientations before/after the operation
+     * @param grid The grid used to validate the rotation
+     * @return true if
+     */
     public boolean kick(Rotations rotation, Grid grid) {
         for (Point kick : rotation.getKickTable(this.type)) {
             this.translate(kick);
@@ -77,20 +86,21 @@ public class Tetromino extends Brick {
                 return true;
             }
 
-            this.translate(kick.opposite());
+            this.translate(kick.invert());
         }
 
         return false;
     }
 
-//    public void update() {
-//        for (int i = 0; i < this.bricks.length; i++) {
-//            Point location = this.add(this.getOffset(i));
-//            this.bricks[i].set(location);
-//        }
-//    }
+    public boolean isValid(Grid grid) {
+        for (Brick b : this.bricks)
+            if (b.isOutOfBounds() || grid.isFilledAt(b))
+                return false;
 
-    // TEMPORARY FOR CONSOLE TESTING
+        return !this.isOutOfBounds() && !grid.isFilledAt(this);
+    }
+
+    // TODO: DELETE LATER; TEMPORARY FOR CONSOLE TESTING
     public boolean isAt(int x, int y) {
         for (Brick brick : this.bricks)
             if (brick.x == x && brick.y == y)

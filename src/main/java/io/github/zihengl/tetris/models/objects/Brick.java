@@ -1,31 +1,31 @@
 package io.github.zihengl.tetris.models.objects;
 
-import io.github.zihengl.tetris.models.enums.Tetrominos;
+import io.github.zihengl.tetris.models.enums.Tetros;
 
 public class Brick extends Point {
 
-    protected Tetrominos type;
+    protected Tetros type;
 
     public Brick(int x, int y) {
-        this(x, y, Tetrominos.EMPTY);
+        this(x, y, Tetros.EMPTY);
     }
 
-    public Brick(int x, int y, Tetrominos type) {
+    public Brick(int x, int y, Tetros type) {
         super(x, y);
         this.type = type;
     }
 
-    public Tetrominos getType() {
+    public Tetros getType() {
         return this.type;
     }
 
-    public void setType(Tetrominos type) {
+    public void setType(Tetros type) {
         this.type = type;
     }
 
     // Returns true if type != EMPTY
     public boolean isFilled() {
-        return !this.type.equals(Tetrominos.EMPTY);
+        return !this.type.equals(Tetros.EMPTY);
     }
 
     public boolean isOutOfBounds() {

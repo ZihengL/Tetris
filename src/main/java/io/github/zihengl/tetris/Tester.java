@@ -25,5 +25,11 @@ public class Tester {
 
         tetris.drop();
         System.out.println("\nDROP" + tetris);
+
+        tetris.drop();
+        System.out.println("\nDROP" + tetris);
+
+        tetris.drop();
+        System.out.println("\nDROP" + tetris);
     }
 }

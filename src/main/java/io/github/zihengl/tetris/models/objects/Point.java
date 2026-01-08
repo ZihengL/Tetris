@@ -31,21 +31,31 @@ public class Point {
         return new Point(this.x + p.x, this.y + p.y);
     }
 
-    // Returns point with flipped x/y values.
-    public Point invert() {
+    /**
+     * @return new Point with inverted x/y values
+     */
+    public Point flip() {
         return new Point(this.y, this.x);
     }
 
-    // Returns point with negative x/y values.
-    public Point opposite() {
+    /**
+     * @return new Point with negative x/y values
+     */
+    public Point invert() {
         return new Point(-this.x, -this.y);
     }
 
-    public Point dotProduct(int mag) {
-        return new Point(this.x * mag, this.y * mag);
+    public Point dotProduct(int scalar) {
+        return new Point(this.x * scalar, this.y * scalar);
     }
 
-    public Point compProduct(Point mag) {
-        return new Point(this.x * mag.x, this.y * mag.y);
+    /**
+     * @param other Point to multiply with
+     * @return new Point that is the resultant of multiplying each
+     * component of this Point with the matching other component of
+     * the other Point.
+     */
+    public Point compProduct(Point other) {
+        return new Point(this.x * other.x, this.y * other.y);
     }
 }

@@ -2,7 +2,7 @@ package io.github.zihengl.tetris.models.enums;
 
 import io.github.zihengl.tetris.models.objects.Point;
 
-public enum Tetrominos {
+public enum Tetros {
 
     J(new Point[] { new Point(-1, -1), new Point(0, -1), new Point(0, 1) }, KickTables.A),
     L(new Point[] { new Point(0, 1), new Point(0, -1), new Point(1, -1) }, KickTables.A),
@@ -17,7 +17,7 @@ public enum Tetrominos {
     public final KickTables kicks;
 
     // Offsets assumes it's pointing towards the first Quadrant.
-    private Tetrominos(Point[] offsets, KickTables kicks) {
+    private Tetros(Point[] offsets, KickTables kicks) {
         this.offsets = offsets;
         this.kicks = kicks;
     }

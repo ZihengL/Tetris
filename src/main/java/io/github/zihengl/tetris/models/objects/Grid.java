@@ -1,13 +1,13 @@
 package io.github.zihengl.tetris.models.objects;
 
-import io.github.zihengl.tetris.models.enums.Tetrominos;
+import io.github.zihengl.tetris.models.enums.Tetros;
 
 public class Grid {
 
     public static final int WIDTH = 10;
     public static final int HEIGHT = 40;
     public static final int BUFFER = 20;
-    public static final Point PIVOT_SPAWN = new Point(WIDTH / 2 - 1, HEIGHT - 2);
+    public static final Point SPAWN = new Point(WIDTH / 2 - 1, HEIGHT - 2);
 
     public final Brick[][] bricks;
 
@@ -42,7 +42,7 @@ public class Grid {
 
     public void emptyRow(int index) {
         for (Brick brick : this.bricks[index])
-            brick.setType(Tetrominos.EMPTY);
+            brick.setType(Tetros.EMPTY);
     }
     
     public void collapseFrom(int row) {
