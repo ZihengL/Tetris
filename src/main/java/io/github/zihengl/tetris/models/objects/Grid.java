@@ -40,23 +40,45 @@ public class Grid {
         return this.bricks[point.y][point.x];
     }
 
+    // VALIDATION
+
+    public boolean isValid(Tetro tetro) {
+        for (Brick brick : tetro.bricks)
+            if (!this.isValid(brick))
+                return false;
+
+        return this.isValid(tetro);
+    }
+
+    public boolean isValid(Point point) {
+        return !this.isOutOfBounds(point) &&
+               !this.isFilledAt(point);
+    }
+
+    public boolean isOutOfBounds(Point point) {
+        return point.x < 0 ||
+               point.y < 0 ||
+               point.x >= this.width(point.y) ||
+               point.y >= this.height();
+    }
+
+    public boolean isFilledAt(Point point) {
+        return this.get(point).isFilled();
+    }
+
+    public boolean isRowFilled(int index) {
+        for (GridBrick brick : this.bricks[index])
+            if (!this.isFilledAt(brick))
+                return false;
+
+        return true;
+    }
+
     // OTHER
 
     public void reset() {
         for (int y = 0; y < this.height(); y++)
             this.emptyRow(y);
-    }
-
-    public boolean isFilledAt(Point point) {
-        return this.bricks[point.y][point.x].isFilled();
-    }
-
-    public boolean isRowFilled(int index) {
-        for (GridBrick brick : this.bricks[index])
-            if (!brick.isFilled())
-                return false;
-
-        return true;
     }
 
     public void emptyRow(int index) {
@@ -70,7 +92,7 @@ public class Grid {
                 GridBrick bot = this.bricks[y][x],
                           top = this.bricks[y + 1][x];
 
-                bot.transmitFrom(top);
+                bot.setType(top.type);
             }
     }
 

@@ -25,11 +25,10 @@ public class Tetris extends Observable {
 
     private final LinkedList<Tetros> queue;
     private final Grid grid;
-
     private Tetro tetro;
+
     private int score = 0;
     private Gamestates state = Gamestates.ONGOING;
-
     private Timer timer;
 
     public Tetris() {
@@ -59,13 +58,6 @@ public class Tetris extends Observable {
 
     public void setGamestate(Gamestates state) {
         this.state = state;
-    }
-
-    public Tetros getTypeAt(int x, int y) {
-        if (this.tetro.isAt(x, y))
-            return this.tetro.type;
-
-        return this.grid.bricks[y][x].type;
     }
 
     // VALIDATION
@@ -104,6 +96,10 @@ public class Tetris extends Observable {
         this.rotate(Rotations.getRotation(before, after));
     }
 
+    /**
+     * Removes the
+     * @param rotation
+     */
     public void rotate(Rotations rotation) {
         this.grid.syphon(this.tetro);
 
@@ -138,7 +134,8 @@ public class Tetris extends Observable {
     // OTHER
 
     /**
-     * Template method called upon whenever the current Tetro gets transferred to the Grid.
+     * Template method called upon whenever the current
+     * Tetro gets transferred to the Grid.
      */
     public void settle() {
         this.grid.transmit(this.tetro);
@@ -159,14 +156,13 @@ public class Tetris extends Observable {
     }
 
     public void checkScore(int row) {
-        for (int y = row; y < Grid.BUFFER; y++)
-            if (this.grid.isRowFilled(y)) {
-                this.grid.collapseFrom(y);
-                this.score += CLEAR_POINTS;
+        if (this.grid.isRowFilled(row)) {
+            this.grid.collapseFrom(row);
+            this.score += CLEAR_POINTS;
+        }
 
-                this.checkScore(y);
-                return;
-            }
+        if (row < Grid.BUFFER)
+            this.checkScore(row + 1);
     }
 
     /**
@@ -192,10 +188,12 @@ public class Tetris extends Observable {
         StringBuilder msg = new StringBuilder();
         msg.append("\n");
 
-        if (this.isGameover()) return "GAME OVER";
+        if (this.isGameover())
+            return this.state.name();
 
-        for (int y = this.grid.height() - 1; y >= 0; y--, msg.append("\n")) {
+        for (int y = this.grid.height() - 1; y >= 0; y--) {
             String filler = y == Grid.BUFFER ? "=" : "-";
+            msg.append("\n");
 
             for (int x = 0; x < this.grid.width(y); x++, msg.append("\t"))
                 if (this.tetro.isAt(x, y))
