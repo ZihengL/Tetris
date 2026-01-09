@@ -1,8 +1,5 @@
 package io.github.zihengl.tetris.models.objects;
 
-import io.github.zihengl.tetris.models.enums.Tetros;
-import io.github.zihengl.tetris.models.observer.Observable;
-
 /**
  * @author Zi
  * @date 1/8/2026
@@ -47,12 +44,12 @@ public class Grid {
             if (!this.isValid(brick))
                 return false;
 
-        return this.isValid(tetro);
+        return this.isValid((Point) tetro);
     }
 
     public boolean isValid(Point point) {
         return !this.isOutOfBounds(point) &&
-               !this.isFilledAt(point);
+               this.isEmptyAt(point);
     }
 
     public boolean isOutOfBounds(Point point) {
@@ -62,13 +59,13 @@ public class Grid {
                point.y >= this.height();
     }
 
-    public boolean isFilledAt(Point point) {
-        return this.get(point).isFilled();
+    public boolean isEmptyAt(Point point) {
+        return !this.get(point).isFilled();
     }
 
     public boolean isRowFilled(int index) {
         for (GridBrick brick : this.bricks[index])
-            if (!this.isFilledAt(brick))
+            if (this.isEmptyAt(brick))
                 return false;
 
         return true;
@@ -85,7 +82,7 @@ public class Grid {
         for (GridBrick brick : this.bricks[index])
             brick.setType(null);
     }
-    
+
     public void collapseFrom(int row) {
         for (int y = row; y < BUFFER; y++)
             for (int x = 0; x < this.width(y); x++) {

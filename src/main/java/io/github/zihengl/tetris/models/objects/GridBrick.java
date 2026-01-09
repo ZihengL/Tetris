@@ -4,8 +4,6 @@ import io.github.zihengl.tetris.models.enums.Tetros;
 import io.github.zihengl.tetris.models.services.TypeUpdater;
 
 /**
- *
- *
  * @author Zi
  * @date 1/8/2026
  */

@@ -28,21 +28,18 @@ public class GamepaneController {
     @FXML private GridPane gridpane;
     @FXML private VBox hudbox;
 
-    private Tetris tetris;
-    private double time = 0;
+//    private final Tetris tetris = Tetris.tetris;
 
     @FXML
     private void initialize() {
         this.gridpane.setOnMouseClicked(mouseEvent -> {
             this.gridpane.requestFocus();
         });
-    }
 
-    public void initializeGridpane(Tetris tetris) {
-        this.tetris = tetris;
+        Tetris tetris = Tetris.tetris;
 
         // GRIDPANE
-        Grid grid = this.tetris.getGrid();
+        Grid grid = tetris.getGrid();
         for (int y = 0; y < Grid.BUFFER; y++)
             for (int x = 0; x < Grid.WIDTH; x++) {
                 BrickComponent component = new BrickComponent();
@@ -52,14 +49,14 @@ public class GamepaneController {
             }
 
         // SHIFT CONTROLS
-        Shifter shifter = this.tetris::shift;
+        Shifter shifter = tetris::shift;
         for (ShiftKeys key : ShiftKeys.values())
             this.gridpane.addEventHandler(KeyEvent.KEY_PRESSED,
                     new ShiftCommand(key, shifter));
 
         // ROTATION CONTROLS
-        Callbacker leftRotator = this.tetris::rotateLeft,
-                   rightRotator = this.tetris::rotateRight;
+        Callbacker leftRotator = tetris::rotateLeft,
+                   rightRotator = tetris::rotateRight;
         this.gridpane.addEventHandler(KeyEvent.KEY_PRESSED,
                 new KeyEventCommand(KeyCode.Z, leftRotator));
         this.gridpane.addEventHandler(KeyEvent.KEY_PRESSED,
@@ -68,29 +65,18 @@ public class GamepaneController {
                 new KeyEventCommand(KeyCode.UP, rightRotator));
 
         // DROP CONTROLS
-        Callbacker dropper = this.tetris::drop;
+        Callbacker dropper = tetris::drop;
         this.gridpane.addEventHandler(KeyEvent.KEY_PRESSED,
                 new KeyEventCommand(KeyCode.SPACE, dropper));
     }
 
     public void requestFocus() {
+        this.gridpane.setFocusTraversable(true);
         this.gridpane.requestFocus();
     }
 
     public void play() {
         this.gridpane.requestFocus();
-
-        Timeline timeline = new Timeline(
-                new KeyFrame(Duration.seconds(0.1), event -> {
-                    this.time += 0.1;
-
-                    if (this.time >= 1.) {
-                        tetris.shift(Orientations.SOUTH);
-                        this.time = 0;
-                    }
-                })
-        );
-        timeline.setCycleCount(Timeline.INDEFINITE);
-        timeline.play();
+        Tetris.tetris.reset();
     }
 }

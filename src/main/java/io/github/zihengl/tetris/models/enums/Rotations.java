@@ -37,7 +37,7 @@ public enum Rotations {
         return this.previous();
     }
 
-    public Point applyRotation(Point offset) {
+    public Point applyTo(Point offset) {
         if (this.after.isFlipped())
             return offset.flip().compProduct(after.quadrant);
 
@@ -46,7 +46,7 @@ public enum Rotations {
 
     public Point[] getKickTable(Tetros type) {
         if (type.kicks.equals(KickTables.C))
-            return new Point[0];
+            return KickTables.C.tables[0];
 
         return type.kicks.tables[this.ordinal()];
     }

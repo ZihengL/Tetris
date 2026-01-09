@@ -1,10 +1,10 @@
 package io.github.zihengl.tetris.models.objects;
 
-import io.github.zihengl.tetris.models.observer.Observable;
-
 /**
  * @author Zi
  * @date 1/8/2026
+ *
+ * Generic class representing a point.
  */
 
 public class Point {

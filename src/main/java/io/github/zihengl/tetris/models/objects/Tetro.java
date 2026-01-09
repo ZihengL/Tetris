@@ -1,5 +1,6 @@
 package io.github.zihengl.tetris.models.objects;
 
+import io.github.zihengl.tetris.models.enums.KickTables;
 import io.github.zihengl.tetris.models.enums.Orientations;
 import io.github.zihengl.tetris.models.enums.Rotations;
 import io.github.zihengl.tetris.models.enums.Tetros;
@@ -39,20 +40,6 @@ public class Tetro extends Brick {
         this.orientation = orientation;
     }
 
-//    public void transmitTo(Grid grid) {
-//        super.transmitTo(grid);
-//
-//        for (Brick brick : this.bricks)
-//            brick.transmitTo(grid);
-//    }
-
-//    public void syphonFrom(Grid grid) {
-//        grid.get(this).setType(Tetros.EMPTY);
-//
-//        for (Brick brick : this.bricks)
-//            grid.get(brick).setType(Tetros.EMPTY);
-//    }
-
     // OTHER
 
     public void translate(Point displacement) {
@@ -71,12 +58,13 @@ public class Tetro extends Brick {
      * @param grid The grid used to validate the rotation
      */
     public void rotate(Rotations rotation, Grid grid) {
-        for (int i = 0; i < this.bricks.length; i++) {
-            Point offset = this.getOffset(i),
-                  rotatedOffset = rotation.applyRotation(offset),
-                  location = this.add(rotatedOffset);
+        if (this.type.equals(Tetros.O)) return;
 
-            this.bricks[i].set(location);
+        for (int i = 0; i < this.bricks.length; i++) {
+            Point rotatedOffset = rotation.applyTo(this.getOffset(i)),
+                  position = this.add(rotatedOffset);
+
+            this.bricks[i].set(position);
         }
 
         if (!this.kick(rotation, grid))
@@ -84,8 +72,6 @@ public class Tetro extends Brick {
     }
 
     /**
-     *
-     *
      * @param rotation The Orientations before/after the operation
      * @param grid The grid used to validate the rotation
      * @return true if
@@ -94,7 +80,7 @@ public class Tetro extends Brick {
         for (Point kick : rotation.getKickTable(this.type)) {
             this.translate(kick);
 
-            if (this.isValid(grid)) {
+            if (grid.isValid(this)) {
                 this.setOrientation(rotation.after);
                 return true;
             }
@@ -103,22 +89,5 @@ public class Tetro extends Brick {
         }
 
         return false;
-    }
-
-    public boolean isValid(Grid grid) {
-        for (Brick b : this.bricks)
-            if (b.isOutOfBounds() || grid.isFilledAt(b))
-                return false;
-
-        return !this.isOutOfBounds() && !grid.isFilledAt(this);
-    }
-
-    // TODO: DELETE LATER; TEMPORARY FOR CONSOLE TESTING
-    public boolean isAt(int x, int y) {
-        for (Brick brick : this.bricks)
-            if (brick.x == x && brick.y == y)
-                return true;
-
-        return this.x == x && this.y == y;
     }
 }

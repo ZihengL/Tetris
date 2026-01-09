@@ -1,9 +1,8 @@
 package io.github.zihengl.tetris.models.objects;
 
-import io.github.zihengl.tetris.models.services.Callbacker;
+import io.github.zihengl.tetris.models.enums.Orientations;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
-import javafx.scene.text.Text;
 import javafx.util.Duration;
 
 /**
@@ -13,47 +12,76 @@ import javafx.util.Duration;
 
 public class Timer {
 
+    public static final double TICKRATE = 1. / 60.;
+    public static final int G_MULTIPLIER = (1 << 20) * 256 / 60;
+    public static final int[] GRAVITY = { 60, 50, 40, 30, 20, 10, 8, 6, 4, 2, 1 };
+
+    private final Tetris tetris;
+
     private final Timeline timeline;
-    private final Callbacker updater;
+    private int frame;
+    private int threshold;
 
-    private int time = 0;
-
-    public Timer(Callbacker updater) {
-        this.updater = updater;
+    public Timer(Tetris tetris) {
+        this.tetris = tetris;
 
         this.timeline = new Timeline(
-                new KeyFrame(Duration.seconds(this.getSpeed()), event -> {
-                    if (++this.time != 5) return;
-
-                    this.updater.callback();
-                    this.time = 0;
-                })
+            new KeyFrame(Duration.seconds(TICKRATE), event -> {
+                switch (this.tetris.getState()) {
+                    case ONGOING -> {
+                        this.update();
+                        return;
+                    }
+                    case PAUSED -> {
+                        this.pause();
+                        return;
+                    }
+                    default -> {
+                        this.stop();
+                        return;
+                    }
+                }
+            })
         );
         this.timeline.setCycleCount(Timeline.INDEFINITE);
+        this.frame = 0;
     }
 
-    public double getSpeed() {
-        return 1.;
+    public void update() {
+        if (++this.frame < this.threshold) return;
+
+        this.tetris.shift(Orientations.SOUTH);
+        this.frame = 0;
     }
 
-    public int getTime() {
-        return this.time;
+    public double getFrame() {
+        return this.frame;
     }
 
     public void play() {
         this.timeline.play();
     }
 
-    public void stop() {
-        this.timeline.stop();
-    }
-
     public void pause() {
         this.timeline.pause();
     }
 
+    public void stop() {
+        this.frame = 0;
+        this.updateThreshold();
+        this.timeline.stop();
+    }
+
     public void reset() {
-        this.time = 0;
+        this.frame = 0;
+        this.updateThreshold();
         this.timeline.playFromStart();
+    }
+
+    public void updateThreshold() {
+        int idx = Math.min(this.tetris.getLevel(), GRAVITY.length - 1);
+        this.threshold = GRAVITY[idx];
+        
+        this.frame = 0;
     }
 }

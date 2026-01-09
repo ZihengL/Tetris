@@ -21,13 +21,8 @@ public class MainController {
     @FXML private VBox menupane;
     @FXML private MenupaneController menupaneController;
 
-    private final Tetris tetris = new Tetris();
-    private double time;
-
     @FXML
     private void initialize() {
-        this.gamepaneController.initializeGridpane(this.tetris);
-
         this.mainpane.setOnMouseClicked(mouseEvent -> {
             this.gamepaneController.requestFocus();
             this.gamepaneController.play();
@@ -40,24 +35,5 @@ public class MainController {
 
     public void toggleScreen() {
 
-    }
-
-    // NOTE: For console tests
-    public void startConsoleTestPlay() {
-        this.time = 0;
-
-        Timeline timeline = new Timeline(
-                new KeyFrame(Duration.seconds(0.1), event -> {
-                    this.time += 0.1;
-                    if (this.time == 1.) {
-                        tetris.shift(Orientations.SOUTH);
-                        this.time = 0;
-                    }
-
-                    System.out.println(tetris);
-                })
-        );
-        timeline.setCycleCount(Timeline.INDEFINITE);
-        timeline.play();
     }
 }
