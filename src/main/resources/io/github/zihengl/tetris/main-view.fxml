@@ -4,17 +4,14 @@
 <?import javafx.scene.layout.VBox?>
 
 <?import javafx.scene.layout.StackPane?>
-<VBox alignment="CENTER" spacing="20.0" xmlns:fx="http://javafx.com/fxml"
+<VBox xmlns:fx="http://javafx.com/fxml"
       fx:controller="io.github.zihengl.tetris.controllers.MainController"
       fx:id="mainpane"
-      minWidth="400" minHeight="600"
+      alignment="CENTER" spacing="20.0"
       style="-fx-background-color: lightgrey;">
-    <padding>
-        <Insets bottom="20.0" left="20.0" right="20.0" top="20.0"/>
-    </padding>
 
     <StackPane fx:id="stacks">
-        <fx:include source="menu-view.fxml" visible="false"/>
-        <fx:include source="game-view.fxml"/>
+        <fx:include fx:id="gamepane" source="game-view.fxml"/>
+        <fx:include fx:id="menupane" source="menu-view.fxml" visible="false"/>
     </StackPane>
 </VBox>

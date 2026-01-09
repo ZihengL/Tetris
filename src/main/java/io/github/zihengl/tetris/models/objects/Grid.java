@@ -11,7 +11,7 @@ import io.github.zihengl.tetris.models.observer.Observable;
 public class Grid {
 
     public static final int WIDTH = 10;
-    public static final int HEIGHT = 40;
+    public static final int HEIGHT = 30;
     public static final int BUFFER = 20;
     public static final Point SPAWN = new Point(WIDTH / 2 - 1, HEIGHT - 2);
 
@@ -47,7 +47,6 @@ public class Grid {
             this.emptyRow(y);
     }
 
-
     public boolean isFilledAt(Point point) {
         return this.bricks[point.y][point.x].isFilled();
     }
@@ -74,7 +73,7 @@ public class Grid {
 //                brick.transmitFrom(top);
 //            }
 
-        for (int y = row; y < this.height(); y++)
+        for (int y = row; y < BUFFER; y++)
             for (int x = 0; x < this.width(y); x++) {
                 Brick bot = this.bricks[y][x],
                       top = this.bricks[y + 1][x];

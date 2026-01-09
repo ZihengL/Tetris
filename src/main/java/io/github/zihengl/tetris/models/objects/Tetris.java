@@ -62,7 +62,7 @@ public class Tetris extends Observable {
         if (this.tetro.isAt(x, y))
             return this.tetro.type;
 
-        return this.grid.get(x, y).type;
+        return this.grid.bricks[y][x].type;
     }
 
     // VALIDATION
@@ -88,6 +88,8 @@ public class Tetris extends Observable {
 
         Rotations rotation = Rotations.getRotation(before, after);
         this.tetro.rotate(rotation, this.grid);
+
+        this.notifyObservers();
     }
 
     /**
@@ -101,6 +103,8 @@ public class Tetris extends Observable {
 
         Rotations rotation = Rotations.getRotation(before, after);
         this.tetro.rotate(rotation, this.grid);
+
+        this.notifyObservers();
     }
 
     public boolean shift(Orientations o) {
@@ -115,6 +119,7 @@ public class Tetris extends Observable {
             }
         }
 
+        this.notifyObservers();
         return true;
     }
 
@@ -132,9 +137,10 @@ public class Tetris extends Observable {
         this.tetro.transmitTo(this.grid);
 
         this.checkGameover();
-        this.checkScore();
-
+        this.checkScore(0);
         this.nextTetro();
+
+        this.notifyObservers();
     }
 
     public void checkGameover() {
@@ -145,17 +151,25 @@ public class Tetris extends Observable {
             }
     }
 
-    public void checkScore() {
-        int score = 0;
+    public void checkScoreOLD() {
+        for (int y = 0; y < Grid.BUFFER; y++)
+            if (this.grid.isRowFilled(y)) {
+                this.grid.collapseFrom(y);
+                this.score += CLEAR_POINTS;
 
-        for (int i = 0; i < Grid.BUFFER; i++)
-            if (this.grid.isRowFilled(i)) {
-                // TODO: REMOVE ROW BEFORE COLLAPSING - TO SHOW ANIMATION
-                this.grid.collapseFrom(i);
-                score += CLEAR_POINTS;
+                y--;
             }
+    }
 
-        this.score += score;
+    public void checkScore(int row) {
+        for (int y = row; y < Grid.BUFFER; y++)
+            if (this.grid.isRowFilled(y)) {
+                this.grid.collapseFrom(y);
+                this.score += CLEAR_POINTS;
+
+                this.checkScore(y);
+                return;
+            }
     }
 
     /**

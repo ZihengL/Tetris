@@ -11,7 +11,7 @@ import javafx.scene.layout.VBox;
  * @date 1/8/2026
  */
 
-public class MenuController {
+public class MenupaneController {
 
     @FXML private VBox menupane;
 

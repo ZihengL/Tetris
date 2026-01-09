@@ -3,8 +3,8 @@
 <?import javafx.scene.layout.*?>
 
 <HBox xmlns="http://javafx.com/javafx"
-            xmlns:fx="http://javafx.com/fxml"
-            fx:controller="io.github.zihengl.tetris.controllers.GameController">
+      xmlns:fx="http://javafx.com/fxml"
+      fx:controller="io.github.zihengl.tetris.controllers.GamepaneController">
 
     <!--GRID-->
     <GridPane fx:id="gridpane"/>

@@ -5,9 +5,8 @@
 
 <VBox xmlns="http://javafx.com/javafx"
             xmlns:fx="http://javafx.com/fxml"
-            fx:controller="io.github.zihengl.tetris.controllers.MenuController"
-            fx:id="menupane"
-            prefHeight="400.0" prefWidth="600.0">
+            fx:controller="io.github.zihengl.tetris.controllers.MenupaneController"
+            fx:id="menupane">
 
     <Button fx:id="btnPlay" text="Play" onAction="#play"/>
     <Button fx:id="btnQuit" text="Quit"/>
