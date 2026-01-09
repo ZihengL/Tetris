@@ -42,11 +42,12 @@ public class GamepaneController {
         this.tetris = tetris;
 
         // GRIDPANE
+        Grid grid = this.tetris.getGrid();
         for (int y = 0; y < Grid.BUFFER; y++)
             for (int x = 0; x < Grid.WIDTH; x++) {
-                BrickComponent component = new BrickComponent(x, y);
+                BrickComponent component = new BrickComponent();
+                grid.get(x, y).setUpdater(component);
 
-                this.tetris.addObserver(component);
                 this.gridpane.add(component, x, Grid.BUFFER - y);
             }
 

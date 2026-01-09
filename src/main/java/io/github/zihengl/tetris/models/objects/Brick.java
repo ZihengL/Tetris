@@ -1,6 +1,7 @@
 package io.github.zihengl.tetris.models.objects;
 
 import io.github.zihengl.tetris.models.enums.Tetros;
+import io.github.zihengl.tetris.models.services.TypeUpdater;
 
 /**
  * @author Zi
@@ -12,7 +13,7 @@ public class Brick extends Point {
     protected Tetros type;
 
     public Brick(int x, int y) {
-        this(x, y, Tetros.EMPTY);
+        this(x, y, null);
     }
 
     public Brick(int x, int y, Tetros type) {
@@ -28,9 +29,8 @@ public class Brick extends Point {
         this.type = type;
     }
 
-    // Returns true if type != EMPTY
     public boolean isFilled() {
-        return !this.type.equals(Tetros.EMPTY);
+        return this.type != null;
     }
 
     public boolean isOutOfBounds() {
@@ -38,12 +38,8 @@ public class Brick extends Point {
             this.x >= Grid.WIDTH || this.y >= Grid.HEIGHT;
     }
 
-    public void transmitTo(Grid grid) {
-        grid.get(this).transmitFrom(this);
-    }
-
     public void transmitFrom(Brick brick) {
-        this.type = brick.type;
+        this.setType(brick.type);
     }
 
     public String toString() {

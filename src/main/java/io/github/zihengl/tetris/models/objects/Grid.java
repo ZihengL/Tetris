@@ -15,13 +15,13 @@ public class Grid {
     public static final int BUFFER = 20;
     public static final Point SPAWN = new Point(WIDTH / 2 - 1, HEIGHT - 2);
 
-    public final Brick[][] bricks;
+    public final GridBrick[][] bricks;
 
     public Grid() {
-        this.bricks = new Brick[HEIGHT][WIDTH];
+        this.bricks = new GridBrick[HEIGHT][WIDTH];
         for (int y = 0; y < this.bricks.length; y++)
             for (int x = 0; x < this.bricks[y].length; x++)
-                this.bricks[y][x] = new Brick(x, y);
+                this.bricks[y][x] = new GridBrick(x, y, null);
     }
 
     public int height() {
@@ -32,11 +32,11 @@ public class Grid {
         return this.bricks[y].length;
     }
 
-    public Brick get(int x, int y) {
+    public GridBrick get(int x, int y) {
         return this.bricks[y][x];
     }
 
-    public Brick get(Point point) {
+    public GridBrick get(Point point) {
         return this.bricks[point.y][point.x];
     }
 
@@ -52,7 +52,7 @@ public class Grid {
     }
 
     public boolean isRowFilled(int index) {
-        for (Brick brick : this.bricks[index])
+        for (GridBrick brick : this.bricks[index])
             if (!brick.isFilled())
                 return false;
 
@@ -60,25 +60,31 @@ public class Grid {
     }
 
     public void emptyRow(int index) {
-        for (Brick brick : this.bricks[index])
-            brick.setType(Tetros.EMPTY);
+        for (GridBrick brick : this.bricks[index])
+            brick.setType(null);
     }
     
     public void collapseFrom(int row) {
-//        for (int x = 0; x < Grid.WIDTH; x++)
-//            for (int y = row; y < Grid.BUFFER; y++) {
-//                Brick brick = this.bricks[y][x],
-//                      top = this.bricks[y + 1][x];
-//
-//                brick.transmitFrom(top);
-//            }
-
         for (int y = row; y < BUFFER; y++)
             for (int x = 0; x < this.width(y); x++) {
-                Brick bot = this.bricks[y][x],
-                      top = this.bricks[y + 1][x];
+                GridBrick bot = this.bricks[y][x],
+                          top = this.bricks[y + 1][x];
 
                 bot.transmitFrom(top);
             }
+    }
+
+    public void syphon(Tetro tetro) {
+        this.get(tetro).setType(null);
+
+        for (Brick brick : tetro.bricks)
+            this.get(brick).setType(null);
+    }
+
+    public void transmit(Tetro tetro) {
+        this.get(tetro).setType(tetro.type);
+
+        for (Brick brick : tetro.bricks)
+            this.get(brick).setType(tetro.type);
     }
 }

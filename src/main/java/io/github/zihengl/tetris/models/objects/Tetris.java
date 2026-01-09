@@ -6,29 +6,36 @@ import io.github.zihengl.tetris.models.enums.Rotations;
 import io.github.zihengl.tetris.models.enums.Tetros;
 import io.github.zihengl.tetris.models.observer.Observable;
 
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.LinkedList;
+import java.util.List;
+
 /**
  * @author Zi
  * @date 1/8/2026
+ *
+ * Equivalent to a CommandManager class, managing all
  */
 
 public class Tetris extends Observable {
 
     public static final int CLEAR_POINTS = 100;
+    public static final int PEEK_SIZE = 3;
 
+    private final LinkedList<Tetros> queue;
     private final Grid grid;
-    private Tetro tetro;
-    private Tetros queue;
 
+    private Tetro tetro;
     private int score = 0;
     private Gamestates state = Gamestates.ONGOING;
 
     private Timer timer;
 
     public Tetris() {
+        this.queue = new LinkedList<Tetros>();
         this.grid = new Grid();
 
-        Tetros[] values = Tetros.values();
-        this.queue = values[(int) (Math.random() * values.length - 1)];
         this.nextTetro();
     }
 
@@ -40,10 +47,6 @@ public class Tetris extends Observable {
 
     public Tetro getTetro() {
         return this.tetro;
-    }
-
-    public Tetros getQueue() {
-        return this.queue;
     }
 
     public int getScore() {
@@ -86,10 +89,7 @@ public class Tetris extends Observable {
         Orientations before = this.tetro.getOrientation(),
                      after = before.previous();
 
-        Rotations rotation = Rotations.getRotation(before, after);
-        this.tetro.rotate(rotation, this.grid);
-
-        this.notifyObservers();
+        this.rotate(Rotations.getRotation(before, after));
     }
 
     /**
@@ -101,28 +101,35 @@ public class Tetris extends Observable {
         Orientations before = this.tetro.getOrientation(),
                      after = before.next();
 
-        Rotations rotation = Rotations.getRotation(before, after);
+        this.rotate(Rotations.getRotation(before, after));
+    }
+
+    public void rotate(Rotations rotation) {
+        this.grid.syphon(this.tetro);
+
         this.tetro.rotate(rotation, this.grid);
 
-        this.notifyObservers();
+        this.grid.transmit(this.tetro);
     }
 
     public boolean shift(Orientations o) {
-        this.tetro.translate(o.unit);
+        this.grid.syphon(this.tetro);
 
+        this.tetro.translate(o.unit);
         if (!this.tetro.isValid(this.grid)) {
             this.tetro.translate(o.opposite().unit);
 
             if (o.equals(Orientations.SOUTH)) {
-                this.transmitTetro();
+                this.settle();
                 return false;
             }
         }
 
-        this.notifyObservers();
+        this.grid.transmit(this.tetro);
         return true;
     }
 
+    // TODO: CHANGE THIS SO THAT WE'RE NOT SYPHONING AND TRANSMITTING REPEATEDLY
     public void drop() {
         if (this.shift(Orientations.SOUTH))
             this.drop();
@@ -133,14 +140,14 @@ public class Tetris extends Observable {
     /**
      * Template method called upon whenever the current Tetro gets transferred to the Grid.
      */
-    public void transmitTetro() {
-        this.tetro.transmitTo(this.grid);
+    public void settle() {
+        this.grid.transmit(this.tetro);
 
         this.checkGameover();
         this.checkScore(0);
         this.nextTetro();
 
-        this.notifyObservers();
+//        this.notifyObservers();
     }
 
     public void checkGameover() {
@@ -148,16 +155,6 @@ public class Tetris extends Observable {
             if (brick.isFilled()) {
                 this.setGamestate(Gamestates.GAMEOVER);
                 return;
-            }
-    }
-
-    public void checkScoreOLD() {
-        for (int y = 0; y < Grid.BUFFER; y++)
-            if (this.grid.isRowFilled(y)) {
-                this.grid.collapseFrom(y);
-                this.score += CLEAR_POINTS;
-
-                y--;
             }
     }
 
@@ -179,9 +176,15 @@ public class Tetris extends Observable {
     public void nextTetro() {
         if (this.isGameover()) return;
 
-        Tetros[] tetros = Tetros.values();
-        this.tetro = new Tetro(Grid.SPAWN.x, Grid.SPAWN.y, this.queue);
-        this.queue = tetros[(int) (Math.random() * tetros.length - 1)];
+        if (this.queue.size() <= PEEK_SIZE) {
+            Tetros[] tetros = Tetros.values();
+            List<Tetros> tetrosList = Arrays.asList(tetros);
+            Collections.shuffle(tetrosList);
+
+            this.queue.addAll(tetrosList);
+        }
+
+        this.tetro = new Tetro(Grid.SPAWN.x, Grid.SPAWN.y, this.queue.pop());
     }
 
     // For console testing

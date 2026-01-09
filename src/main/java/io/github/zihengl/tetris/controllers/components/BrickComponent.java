@@ -1,9 +1,11 @@
 package io.github.zihengl.tetris.controllers.components;
 
 import io.github.zihengl.tetris.models.enums.Tetros;
+import io.github.zihengl.tetris.models.objects.Brick;
 import io.github.zihengl.tetris.models.objects.Tetris;
 import io.github.zihengl.tetris.models.observer.Observable;
 import io.github.zihengl.tetris.models.observer.Observer;
+import io.github.zihengl.tetris.models.services.TypeUpdater;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
@@ -14,38 +16,24 @@ import java.net.URL;
  * @date 1/8/2026
  */
 
-public class BrickComponent extends ImageView implements Observer  {
+public class BrickComponent extends ImageView implements TypeUpdater {
 
     public static final String RES_DIR = "/io/github/zihengl/tetris/img/";
 
-    public final int x;
-    public final int y;
-
-    private Tetros type;
-
-    public BrickComponent(int x, int y) {
+    public BrickComponent() {
         super();
-        this.x = x;
-        this.y = y;
 
-        this.type = Tetros.EMPTY;
-        this.updateImage();
+        this.update(null);
     }
 
     @Override
-    public void update(Observable observable) {
-        Tetris tetris = (Tetris) observable;
-
-        Tetros type = tetris.getTypeAt(this.x, this.y);
-        if (!this.type.equals(type)) {
-            this.type = type;
-            this.updateImage();
-        }
+    public void update(Tetros type) {
+        String path = RES_DIR + (type == null ? "EMPTY" : type) + ".jpg";
+        this.updateImage(path);
     }
 
-    public void updateImage() {
-        URL url = BrickComponent.class.getResource(
-                RES_DIR + this.type.name() + ".jpg");
+    public void updateImage(String path) {
+        URL url = BrickComponent.class.getResource(path);
 
         this.setImage(new Image(url.toString()));
         this.setFitWidth(30);

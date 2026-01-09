@@ -39,12 +39,19 @@ public class Tetro extends Brick {
         this.orientation = orientation;
     }
 
-    public void transmitTo(Grid grid) {
-        super.transmitTo(grid);
+//    public void transmitTo(Grid grid) {
+//        super.transmitTo(grid);
+//
+//        for (Brick brick : this.bricks)
+//            brick.transmitTo(grid);
+//    }
 
-        for (Brick brick : this.bricks)
-            brick.transmitTo(grid);
-    }
+//    public void syphonFrom(Grid grid) {
+//        grid.get(this).setType(Tetros.EMPTY);
+//
+//        for (Brick brick : this.bricks)
+//            grid.get(brick).setType(Tetros.EMPTY);
+//    }
 
     // OTHER
 
