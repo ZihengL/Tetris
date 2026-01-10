@@ -13,25 +13,53 @@
     <GridPane fx:id="gridpane"/>
 
     <!--HUD-->
-    <VBox fx:id="hudbox"
-          alignment="CENTER"
-          minWidth="100">
-        <Text text="QUEUE"/>
-        <VBox fx:id="peekbox" alignment="CENTER">
-            <ImageView fitWidth="50" fitHeight="50"/>
-            <ImageView fitWidth="50" fitHeight="50"/>
-            <ImageView fitWidth="50" fitHeight="50"/>
+    <VBox alignment="CENTER"
+          minWidth="100"
+          spacing="10"
+          style="-fx-background-color: #21201E;
+                 -fx-border-color: #6C6C6C;
+                 -fx-border-width: 1;
+                 -fx-border-style: solid;
+                 -fx-padding: 10;">
+
+        <!--PEEK QUEUEZ-->
+        <Text text="QUEUE"
+              style="-fx-fill: #C7C7CC;
+                     -fx-font-size: 18px;
+                     -fx-font-weight: bold;"/>
+        <VBox fx:id="peekbox"
+              alignment="CENTER"
+              style="-fx-border-radius: 5;
+                     -fx-background-color: #2D2D2D;
+                     -fx-border-color: #C7C7CC;
+                     -fx-border-width: 3;
+                     -fx-border-style: solid;">
+            <ImageView fitWidth="100" fitHeight="100"/>
+            <ImageView fitWidth="100" fitHeight="100"/>
+            <ImageView fitWidth="100" fitHeight="100"/>
         </VBox>
 
-        <Rectangle height="100"/>
+        <Rectangle height="50"/>
 
-        <Text text="SCORE"/>
+        <!--SCORE-->
+        <Text text="SCORE"
+              style="-fx-fill: #C7C7CC;
+                     -fx-font-size: 18px;
+                     -fx-font-weight: bold;"/>
         <Text fx:id="txtScore"/>
 
-        <Text text="LEVEL"/>
+        <!--LEVEL-->
+        <Text text="LEVEL"
+              style="-fx-fill: #C7C7CC;
+                     -fx-font-size: 18px;
+                     -fx-font-weight: bold;"/>
         <Text fx:id="txtLevel"/>
 
-        <Text text="LINES"/>
+        <!--LINES-->
+        <Text text="LINES"
+              style="-fx-fill: #C7C7CC;
+                     -fx-font-size: 18px;
+                     -fx-font-weight: bold;"/>
         <Text fx:id="txtLines"/>
     </VBox>
 </HBox>

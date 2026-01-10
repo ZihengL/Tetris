@@ -218,6 +218,7 @@ public class Tetris extends Observable {
         if (this.grid.isRowFilled(row)) {
             this.grid.collapseFrom(row);
             score += PTS_PER_LINE;
+            row--;  // Because every tile above is moved down one tick.
         }
 
         if (row < Grid.BUFFER)
