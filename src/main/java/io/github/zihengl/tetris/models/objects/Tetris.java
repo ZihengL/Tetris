@@ -37,10 +37,12 @@ public class Tetris extends Observable {
 
     public Tetris() {
         this.grid = new Grid();
-        this.timer = new Timer(this);
+        this.timer = new Timer();
         this.queue = new LinkedList<Tetros>();
 
-        this.reset();
+        this.score = 0;
+        this.state = Gamestates.ONGOING;
+        this.nextTetro();
     }
 
     // GETTERS & SETTERS
@@ -65,13 +67,16 @@ public class Tetris extends Observable {
         return this.timer;
     }
 
-    public int getLevel() {
-        return this.score / PTS_PER_LINE / LINES_PER_LVL + 1;
+    public Tetros getInQueue(int index) {
+        return this.queue.get(index);
     }
 
-    public void addToScore(int score) {
-        this.score += score;
-        this.timer.updateThreshold();
+    public int getLevel() {
+        return this.getLines() / LINES_PER_LVL + 1;
+    }
+
+    public int getLines() {
+        return this.score / PTS_PER_LINE;
     }
 
     public void setScore(int score) {

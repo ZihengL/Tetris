@@ -13,21 +13,16 @@ import javafx.util.Duration;
 public class Timer {
 
     public static final double TICKRATE = 1. / 60.;
-    public static final int G_MULTIPLIER = (1 << 20) * 256 / 60;
     public static final int[] GRAVITY = { 60, 50, 40, 30, 20, 10, 8, 6, 4, 2, 1 };
-
-    private final Tetris tetris;
 
     private final Timeline timeline;
     private int frame;
     private int threshold;
 
-    public Timer(Tetris tetris) {
-        this.tetris = tetris;
-
+    public Timer() {
         this.timeline = new Timeline(
             new KeyFrame(Duration.seconds(TICKRATE), event -> {
-                switch (this.tetris.getState()) {
+                switch (Tetris.tetris.getState()) {
                     case ONGOING -> {
                         this.update();
                         return;
@@ -50,7 +45,7 @@ public class Timer {
     public void update() {
         if (++this.frame < this.threshold) return;
 
-        this.tetris.shift(Orientations.SOUTH);
+        Tetris.tetris.shift(Orientations.SOUTH);
         this.frame = 0;
     }
 
@@ -79,9 +74,9 @@ public class Timer {
     }
 
     public void updateThreshold() {
-        int idx = Math.min(this.tetris.getLevel(), GRAVITY.length - 1);
+        int idx = Math.min(Tetris.tetris.getLevel(), GRAVITY.length - 1);
         this.threshold = GRAVITY[idx];
-        
+
         this.frame = 0;
     }
 }

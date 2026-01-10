@@ -7,6 +7,4 @@
            xmlns:fx="http://javafx.com/fxml"
            fx:controller="io.github.zihengl.tetris.controllers.components.BrickComponent"
            fx:id="view">
-
-    <Image fx:id="image"/>
 </ImageView>

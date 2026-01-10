@@ -4,6 +4,12 @@ import io.github.zihengl.tetris.models.enums.Tetros;
 import io.github.zihengl.tetris.models.services.TypeUpdater;
 
 /**
+ * Extension of Brick that is a functional equivalent
+ * adaptation of the Observer pattern since Brick is
+ * already an extension of Point. The TypeUpdater
+ * allows individual Brick objects to notify their
+ * matching UI component to update the image.
+ *
  * @author Zi
  * @date 1/8/2026
  */

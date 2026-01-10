@@ -2,6 +2,9 @@
 
 <?import javafx.scene.layout.*?>
 
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.text.Text?>
+<?import javafx.scene.shape.Rectangle?>
 <HBox xmlns="http://javafx.com/javafx"
       xmlns:fx="http://javafx.com/fxml"
       fx:controller="io.github.zihengl.tetris.controllers.GamepaneController">
@@ -10,7 +13,25 @@
     <GridPane fx:id="gridpane"/>
 
     <!--HUD-->
-    <VBox fx:id="hudbox">
+    <VBox fx:id="hudbox"
+          alignment="CENTER"
+          minWidth="100">
+        <Text text="QUEUE"/>
+        <VBox fx:id="peekbox" alignment="CENTER">
+            <ImageView fitWidth="50" fitHeight="50"/>
+            <ImageView fitWidth="50" fitHeight="50"/>
+            <ImageView fitWidth="50" fitHeight="50"/>
+        </VBox>
 
+        <Rectangle height="100"/>
+
+        <Text text="SCORE"/>
+        <Text fx:id="txtScore"/>
+
+        <Text text="LEVEL"/>
+        <Text fx:id="txtLevel"/>
+
+        <Text text="LINES"/>
+        <Text fx:id="txtLines"/>
     </VBox>
 </HBox>

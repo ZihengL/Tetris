@@ -8,7 +8,7 @@ package io.github.zihengl.tetris.models.objects;
 public class Grid {
 
     public static final int WIDTH = 10;
-    public static final int HEIGHT = 30;
+    public static final int HEIGHT = 23;
     public static final int BUFFER = 20;
     public static final Point SPAWN = new Point(WIDTH / 2 - 1, HEIGHT - 2);
 
