@@ -1,10 +1,6 @@
 package io.github.zihengl.tetris.controllers.components;
 
 import io.github.zihengl.tetris.models.enums.Tetros;
-import io.github.zihengl.tetris.models.objects.Brick;
-import io.github.zihengl.tetris.models.objects.Tetris;
-import io.github.zihengl.tetris.models.observer.Observable;
-import io.github.zihengl.tetris.models.observer.Observer;
 import io.github.zihengl.tetris.models.services.TypeUpdater;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;

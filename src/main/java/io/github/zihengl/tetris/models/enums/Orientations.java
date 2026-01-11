@@ -3,6 +3,10 @@ package io.github.zihengl.tetris.models.enums;
 import io.github.zihengl.tetris.models.objects.Point;
 
 /**
+ * Cardinal directions comes with an
+ * associated quadrant(I, II, III, IV)
+ * Point serving as the basis
+ *
  * @author Zi
  * @date 1/8/2026
  */

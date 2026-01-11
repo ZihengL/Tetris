@@ -2,7 +2,6 @@ package io.github.zihengl.tetris.models.objects;
 
 import io.github.zihengl.tetris.models.enums.Gamestates;
 import io.github.zihengl.tetris.models.enums.Orientations;
-import io.github.zihengl.tetris.models.enums.Rotations;
 import io.github.zihengl.tetris.models.enums.Tetros;
 import io.github.zihengl.tetris.models.observer.Observable;
 
@@ -21,7 +20,7 @@ import java.util.List;
 
 public class Tetris extends Observable {
 
-    public static final Tetris tetris = new Tetris();
+    public static final Tetris instance = new Tetris();
 
     public static final int PTS_PER_LINE = 100;
     public static final int LINES_PER_LVL = 10;
@@ -35,7 +34,7 @@ public class Tetris extends Observable {
     private int score;
     private Gamestates state;
 
-    public Tetris() {
+    private Tetris() {
         this.grid = new Grid();
         this.timer = new Timer();
         this.queue = new LinkedList<Tetros>();
@@ -81,7 +80,6 @@ public class Tetris extends Observable {
 
     public void setScore(int score) {
         this.score = score;
-        this.timer.updateThreshold();
     }
 
     public void setGamestate(Gamestates state) {
@@ -106,10 +104,7 @@ public class Tetris extends Observable {
      * then invokes the rotate() method with the rotation in parameter.
      */
     public void rotateRight() {
-        Orientations before = this.tetro.getOrientation(),
-                     after = before.previous();
-
-        this.rotate(Rotations.getRotation(before, after));
+        this.rotate(Rotation.clockwise(this.tetro.orientation));
     }
 
     /**
@@ -118,10 +113,7 @@ public class Tetris extends Observable {
      * then invokes the rotate() method with the rotation in parameter.
      */
     public void rotateLeft() {
-        Orientations before = this.tetro.getOrientation(),
-                     after = before.next();
-
-        this.rotate(Rotations.getRotation(before, after));
+        this.rotate(Rotation.counterClockwise(this.tetro.orientation));
     }
 
     /**
@@ -130,10 +122,22 @@ public class Tetris extends Observable {
      * the grid in its final position.
      * @param rotation defines the attributes of the rotation.
      */
-    public void rotate(Rotations rotation) {
+    public void rotate(Rotation rotation) {
         this.syphon();
         this.tetro.rotate(rotation, this.grid);
         this.transmit();
+    }
+
+    public void shiftLeft() {
+        this.shift(Orientations.WEST);
+    }
+
+    public void shiftDown() {
+        this.shift(Orientations.SOUTH);
+    }
+
+    public void shiftRight() {
+        this.shift(Orientations.EAST);
     }
 
     /**
@@ -196,7 +200,7 @@ public class Tetris extends Observable {
      */
     public void settle() {
         this.checkGameover();
-        this.checkScore(0, 0);
+        this.checkScore(0);
         this.nextTetro();
 
         this.notifyObservers();
@@ -214,17 +218,17 @@ public class Tetris extends Observable {
             }
     }
 
-    public void checkScore(int row, int score) {
+    public void checkScore(int row) {
         if (this.grid.isRowFilled(row)) {
             this.grid.collapseFrom(row);
-            score += PTS_PER_LINE;
-            row--;  // Because every tile above is moved down one tick.
-        }
+            this.score += PTS_PER_LINE;
 
-        if (row < Grid.BUFFER)
-            this.checkScore(row + 1, score);
+            this.checkScore(row);
+        }
+        else if (row < Grid.BUFFER)
+            this.checkScore(row + 1);
         else
-            this.setScore(this.score + score);
+            this.timer.updateThreshold();
     }
 
     /**
@@ -243,13 +247,14 @@ public class Tetris extends Observable {
         this.tetro = new Tetro(Grid.SPAWN.x, Grid.SPAWN.y, this.queue.pop());
     }
 
+    // TODO: REFINE
     public void reset() {
+        this.setScore(0);
         this.timer.stop();
 
         this.grid.reset();
         this.queue.clear();
         this.nextTetro();
-        this.setScore(0);
         this.setGamestate(Gamestates.ONGOING);
 
         this.timer.play();
@@ -262,9 +267,16 @@ public class Tetris extends Observable {
         if (this.isGameover())
             return this.state.name();
 
-        for (int y = this.grid.height() - 1; y >= 0; y--, msg.append("\n"))
-            for (int x = 0; x < this.grid.width(y); x++)
-                msg.append(this.grid.get(x, y).isFilled() ? "O" : "-").append("\t");
+        for (int y = this.grid.height() - 1; y >= 0; y--, msg.append("\n")) {
+            for (int x = 0; x < this.grid.width(y); x++) {
+                if (this.tetro.isAt(x, y))
+                    msg.append(this.tetro.isPivot(x, y) ? "1" : "2");
+                else
+                    msg.append(this.grid.get(x, y).isFilled() ? "O" : "-");
+
+                msg.append("\t");
+            }
+        }
 
         return msg.toString();
     }

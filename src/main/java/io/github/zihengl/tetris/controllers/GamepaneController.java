@@ -1,29 +1,21 @@
 package io.github.zihengl.tetris.controllers;
 
 import io.github.zihengl.tetris.controllers.commands.controls.KeyEventCommand;
-import io.github.zihengl.tetris.controllers.commands.controls.ShiftCommand;
-import io.github.zihengl.tetris.controllers.commands.controls.ShiftKeys;
+import io.github.zihengl.tetris.controllers.commands.controls.Keymaps;
 import io.github.zihengl.tetris.controllers.components.BrickComponent;
-import io.github.zihengl.tetris.models.enums.Orientations;
 import io.github.zihengl.tetris.models.enums.Tetros;
 import io.github.zihengl.tetris.models.objects.Grid;
 import io.github.zihengl.tetris.models.objects.Tetris;
 import io.github.zihengl.tetris.models.observer.Observable;
 import io.github.zihengl.tetris.models.observer.Observer;
-import io.github.zihengl.tetris.models.services.Callbacker;
-import io.github.zihengl.tetris.models.services.Shifter;
-import javafx.animation.KeyFrame;
-import javafx.animation.Timeline;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
-import javafx.util.Duration;
 
 import java.net.URL;
 import java.util.List;
@@ -51,7 +43,7 @@ public class GamepaneController implements Observer {
             this.gridpane.requestFocus();
         });
 
-        Tetris tetris = Tetris.tetris;
+        Tetris tetris = Tetris.instance;
 
         // GRIDPANE
         Grid grid = tetris.getGrid();
@@ -63,33 +55,20 @@ public class GamepaneController implements Observer {
                 this.gridpane.add(component, x, Grid.BUFFER - y);
             }
 
-        // SHIFT CONTROLS
-        Shifter shifter = tetris::shift;
-        for (ShiftKeys key : ShiftKeys.values())
-            this.gridpane.addEventHandler(KeyEvent.KEY_PRESSED,
-                    new ShiftCommand(key, shifter));
-
-        // ROTATION CONTROLS
-        Callbacker leftRotator = tetris::rotateLeft,
-                   rightRotator = tetris::rotateRight;
-        this.gridpane.addEventHandler(KeyEvent.KEY_PRESSED,
-                new KeyEventCommand(KeyCode.Z, leftRotator));
-        this.gridpane.addEventHandler(KeyEvent.KEY_PRESSED,
-                new KeyEventCommand(KeyCode.X, rightRotator));
-        this.gridpane.addEventHandler(KeyEvent.KEY_PRESSED,
-                new KeyEventCommand(KeyCode.UP, rightRotator));
-
-        // DROP CONTROLS
-        Callbacker dropper = tetris::drop;
-        this.gridpane.addEventHandler(KeyEvent.KEY_PRESSED,
-                new KeyEventCommand(KeyCode.SPACE, dropper));
+        // CONTROLS
+        for (Keymaps keymap : Keymaps.values())
+            this.gridpane.addEventHandler(
+                    KeyEvent.KEY_PRESSED,
+                    new KeyEventCommand(keymap.code, keymap.callbacker)
+            );
 
         tetris.addObserver(this);
+        this.update(tetris);
     }
 
     @Override
     public void update(Observable observable) {
-        Tetris tetris = Tetris.tetris;
+        Tetris tetris = Tetris.instance;
 
         List<Node> children = this.peekbox.getChildren();
         for (int i = 0; i < children.size(); i++) {
@@ -124,6 +103,6 @@ public class GamepaneController implements Observer {
 
     public void play() {
         this.gridpane.requestFocus();
-        Tetris.tetris.reset();
+        Tetris.instance.reset();
     }
 }

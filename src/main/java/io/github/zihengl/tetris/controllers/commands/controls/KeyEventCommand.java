@@ -27,5 +27,7 @@ public class KeyEventCommand implements EventHandler<KeyEvent> {
     public void handle(KeyEvent event) {
         if (this.code == event.getCode())
             this.callbacker.callback();
+
+        event.consume();
     }
 }

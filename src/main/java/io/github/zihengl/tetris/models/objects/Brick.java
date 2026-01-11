@@ -29,7 +29,7 @@ public class Brick extends Point {
         return this.type != null;
     }
 
-    public String toString() {
-        return String.format("[%d, %d]", this.x, this.y);
-    }
+//    public String toString() {
+//        return String.format("[%d, %d]", this.x, this.y);
+//    }
 }

@@ -15,19 +15,19 @@ import io.github.zihengl.tetris.models.objects.Point;
 
 public enum Tetros {
 
-    J(new Point[] { new Point(-1, -1),  new Point(0, -1),   new Point(0, 1) },   KickTables.A),
-    L(new Point[] { new Point(0, 1),    new Point(0, -1),   new Point(1, -1) },  KickTables.A),
-    S(new Point[] { new Point(-1, 0),   new Point(0, 1),    new Point(1, 1) },   KickTables.A),
-    T(new Point[] { new Point(-1, 0),   new Point(0, 1),    new Point(1, 0) },   KickTables.A),
-    Z(new Point[] { new Point(-1, 1),   new Point(0, 1),    new Point(1, 0) },   KickTables.A),
-    I(new Point[] { new Point(0, -2),   new Point(0, -1),   new Point(0, 1) },   KickTables.B),
-    O(new Point[] { new Point(1, 0),    new Point(0, 1),    new Point(1, 1) },   KickTables.C);
+    J(new Point[] { new Point(-1, 1),  new Point(-1, 0),   new Point(1, 0) },   Kicks.A),
+    L(new Point[] { new Point(-1, 0),    new Point(1, 0),   new Point(1, 1) },  Kicks.A),
+    S(new Point[] { new Point(-1, 0),   new Point(0, 1),    new Point(1, 1) },   Kicks.A),
+    T(new Point[] { new Point(-1, 0),   new Point(0, 1),    new Point(1, 0) },   Kicks.A),
+    Z(new Point[] { new Point(-1, 1),   new Point(0, 1),    new Point(1, 0) },   Kicks.A),
+    I(new Point[] { new Point(-2, 0),   new Point(-1, 0),   new Point(1, 0) },   Kicks.B),
+    O(new Point[] { new Point(1, 0),    new Point(0, 1),    new Point(1, 1) },   Kicks.C);
 
     public final Point[] offsets;
-    public final KickTables kicks;
+    public final Kicks kicks;
 
     // Offsets assumes it's pointing North.
-    private Tetros(Point[] offsets, KickTables kicks) {
+    private Tetros(Point[] offsets, Kicks kicks) {
         this.offsets = offsets;
         this.kicks = kicks;
     }

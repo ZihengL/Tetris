@@ -1,8 +1,6 @@
 package io.github.zihengl.tetris.models.objects;
 
-import io.github.zihengl.tetris.models.enums.KickTables;
 import io.github.zihengl.tetris.models.enums.Orientations;
-import io.github.zihengl.tetris.models.enums.Rotations;
 import io.github.zihengl.tetris.models.enums.Tetros;
 
 /**
@@ -56,14 +54,14 @@ public class Tetro extends Brick {
      *
      * @param rotation The Orientations before/after the operation
      * @param grid The grid used to validate the rotation
+     * @return true if the rotation was performed successfully.
      */
-    public void rotate(Rotations rotation, Grid grid) {
+    public void rotate(Rotation rotation, Grid grid) {
         if (this.type.equals(Tetros.O)) return;
 
         for (int i = 0; i < this.bricks.length; i++) {
             Point rotatedOffset = rotation.applyTo(this.getOffset(i)),
                   position = this.add(rotatedOffset);
-
             this.bricks[i].set(position);
         }
 
@@ -71,12 +69,7 @@ public class Tetro extends Brick {
             this.rotate(rotation.invert(), grid);
     }
 
-    /**
-     * @param rotation The Orientations before/after the operation
-     * @param grid The grid used to validate the rotation
-     * @return true if
-     */
-    public boolean kick(Rotations rotation, Grid grid) {
+    public boolean kick(Rotation rotation, Grid grid) {
         for (Point kick : rotation.getKickTable(this.type)) {
             this.translate(kick);
 
@@ -89,5 +82,26 @@ public class Tetro extends Brick {
         }
 
         return false;
+    }
+
+    public boolean isAt(int x, int y) {
+        for (Brick b : this.bricks)
+            if (b.x == x && b.y == y)
+                return true;
+
+        return this.x == x && this.y == y;
+    }
+
+    public boolean isPivot(int x, int y) {
+        return this.x == x && this.y == y;
+    }
+
+    public String toString() {
+        String result = super.toString();
+
+        for (Brick b : this.bricks)
+            result += "\t" + b;
+
+        return result;
     }
 }

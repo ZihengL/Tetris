@@ -64,4 +64,8 @@ public class Point {
     public Point compProduct(Point other) {
         return new Point(this.x * other.x, this.y * other.y);
     }
+
+    public String toString() {
+        return String.format("[%02d, %02d]", this.x, this.y);
+    }
 }

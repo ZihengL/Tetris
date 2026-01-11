@@ -22,7 +22,7 @@ public class Timer {
     public Timer() {
         this.timeline = new Timeline(
             new KeyFrame(Duration.seconds(TICKRATE), event -> {
-                switch (Tetris.tetris.getState()) {
+                switch (Tetris.instance.getState()) {
                     case ONGOING -> {
                         this.update();
                         return;
@@ -45,12 +45,8 @@ public class Timer {
     public void update() {
         if (++this.frame < this.threshold) return;
 
-        Tetris.tetris.shift(Orientations.SOUTH);
+        Tetris.instance.shift(Orientations.SOUTH);
         this.frame = 0;
-    }
-
-    public double getFrame() {
-        return this.frame;
     }
 
     public void play() {
@@ -62,19 +58,23 @@ public class Timer {
     }
 
     public void stop() {
-        this.frame = 0;
-        this.updateThreshold();
         this.timeline.stop();
+
+        this.frame = 0;
+        this.threshold = GRAVITY[0];
     }
 
     public void reset() {
+        this.timeline.pause();
+
         this.frame = 0;
-        this.updateThreshold();
+        this.threshold = GRAVITY[0];
+
         this.timeline.playFromStart();
     }
 
     public void updateThreshold() {
-        int idx = Math.min(Tetris.tetris.getLevel(), GRAVITY.length - 1);
+        int idx = Math.min(Tetris.instance.getLevel(), GRAVITY.length - 1);
         this.threshold = GRAVITY[idx];
 
         this.frame = 0;
