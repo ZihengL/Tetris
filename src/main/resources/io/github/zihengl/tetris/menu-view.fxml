@@ -9,6 +9,5 @@
             fx:id="menupane">
 
     <Button fx:id="btnPlay" text="Play" onAction="#play"/>
-    <Button fx:id="btnQuit" text="Quit"/>
-
+    <Button fx:id="btnQuit" text="Quit" onAction="#quit"/>
 </VBox>

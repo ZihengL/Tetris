@@ -84,6 +84,9 @@ public class Tetro extends Brick {
         return false;
     }
 
+    // OTHER
+
+    // Returns true if the pivot or any of its dependents are located at x/y in param.
     public boolean isAt(int x, int y) {
         for (Brick b : this.bricks)
             if (b.x == x && b.y == y)

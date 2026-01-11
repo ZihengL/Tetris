@@ -26,22 +26,22 @@ public class Tetris extends Observable {
     public static final int LINES_PER_LVL = 10;
     public static final int PEEK_SIZE = 3;
 
-    private final Grid grid;
-    private final Timer timer;
-    private final LinkedList<Tetros> queue;
+    public final Timer timer;
+    public final Grid grid;
+    public final LinkedList<Tetros> queue;
 
     private Tetro tetro;
     private int score;
     private Gamestates state;
 
     private Tetris() {
-        this.grid = new Grid();
         this.timer = new Timer();
+        this.grid = new Grid();
         this.queue = new LinkedList<Tetros>();
 
         this.score = 0;
         this.state = Gamestates.ONGOING;
-        this.nextTetro();
+//        this.nextTetro();
     }
 
     // GETTERS & SETTERS
@@ -184,15 +184,8 @@ public class Tetris extends Observable {
         this.settle();
     }
 
+
     // OTHER
-
-    public void syphon() {
-        this.grid.syphon(this.tetro);
-    }
-
-    public void transmit() {
-        this.grid.transmit(this.tetro);
-    }
 
     /**
      * Template method invoked after a Tetro
@@ -200,7 +193,7 @@ public class Tetris extends Observable {
      */
     public void settle() {
         this.checkGameover();
-        this.checkScore(0);
+        this.checkScore();
         this.nextTetro();
 
         this.notifyObservers();
@@ -218,17 +211,31 @@ public class Tetris extends Observable {
             }
     }
 
-    public void checkScore(int row) {
-        if (this.grid.isRowFilled(row)) {
-            this.grid.collapseFrom(row);
-            this.score += PTS_PER_LINE;
-
-            this.checkScore(row);
+    /**
+     * For each row starting from 0, checks if all Bricks on
+     * the row is filled. If true, then moves the Tetros type of
+     * every Brick above a level down starting from the current row
+     * value + 1.
+     */
+    public void checkScore() {
+        int row = 0;
+        while (row < Grid.BUFFER) {
+            if (this.grid.isRowFilled(row)) {
+                this.grid.collapseFrom(row);
+                this.score += PTS_PER_LINE;
+            } else
+                row++;
         }
-        else if (row < Grid.BUFFER)
-            this.checkScore(row + 1);
-        else
-            this.timer.updateThreshold();
+
+        this.timer.updateThreshold();
+    }
+
+    public void transmit() {
+        this.grid.transmit(this.tetro);
+    }
+
+    public void syphon() {
+        this.grid.syphon(this.tetro);
     }
 
     /**
@@ -249,12 +256,12 @@ public class Tetris extends Observable {
 
     // TODO: REFINE
     public void reset() {
-        this.setScore(0);
-        this.timer.stop();
-
+        this.timer.reset();
         this.grid.reset();
         this.queue.clear();
+
         this.nextTetro();
+        this.setScore(0);
         this.setGamestate(Gamestates.ONGOING);
 
         this.timer.play();
@@ -270,7 +277,7 @@ public class Tetris extends Observable {
         for (int y = this.grid.height() - 1; y >= 0; y--, msg.append("\n")) {
             for (int x = 0; x < this.grid.width(y); x++) {
                 if (this.tetro.isAt(x, y))
-                    msg.append(this.tetro.isPivot(x, y) ? "1" : "2");
+                    msg.append(this.tetro.isPivot(x, y));
                 else
                     msg.append(this.grid.get(x, y).isFilled() ? "O" : "-");
 

@@ -3,6 +3,9 @@ package io.github.zihengl.tetris.controllers;
 import io.github.zihengl.tetris.controllers.commands.controls.KeyEventCommand;
 import io.github.zihengl.tetris.controllers.commands.controls.Keymaps;
 import io.github.zihengl.tetris.controllers.components.BrickComponent;
+import io.github.zihengl.tetris.controllers.components.HudComponent;
+import io.github.zihengl.tetris.controllers.components.HudComponents;
+import io.github.zihengl.tetris.controllers.components.TetropeekComponent;
 import io.github.zihengl.tetris.models.enums.Tetros;
 import io.github.zihengl.tetris.models.objects.Grid;
 import io.github.zihengl.tetris.models.objects.Tetris;
@@ -31,11 +34,15 @@ public class GamepaneController implements Observer {
 
     @FXML private GridPane gridpane;
 
-    @FXML private VBox hudbox;
+    // HUD
     @FXML private VBox peekbox;
-    @FXML private Text txtScore;
-    @FXML private Text txtLevel;
-    @FXML private Text txtLines;
+
+    @FXML private VBox scorebox;
+    @FXML private HudComponent scoreboxController;
+    @FXML private VBox levelbox;
+    @FXML private HudComponent levelboxController;
+    @FXML private VBox linesbox;
+    @FXML private HudComponent linesboxController;
 
     @FXML
     private void initialize() {
@@ -62,31 +69,36 @@ public class GamepaneController implements Observer {
                     new KeyEventCommand(keymap.code, keymap.callbacker)
             );
 
+        // PEEK
+        for (int i = Tetris.PEEK_SIZE - 1; i >= 0; i--) {
+            TetropeekComponent component = new TetropeekComponent(i);
+            tetris.addObserver(component);
+
+            this.peekbox.getChildren().add(component);
+        }
+
+        this.scoreboxController.set("SCORE", tetris::getScore);
+        this.levelboxController.set("LEVEL", tetris::getLevel);
+        this.linesboxController.set("LINES", tetris::getLines);
+
         tetris.addObserver(this);
         this.update(tetris);
     }
 
     @Override
     public void update(Observable observable) {
-        Tetris tetris = Tetris.instance;
+        this.scoreboxController.update();
+        this.levelboxController.update();
+        this.linesboxController.update();
 
-        List<Node> children = this.peekbox.getChildren();
-        for (int i = 0; i < children.size(); i++) {
-            Image image = this.getIcon(tetris.getInQueue(i));
-
-            int index = children.size() - 1 - i;
-            ImageView view = (ImageView) children.get(index);
-            view.setImage(image);
-        }
-
-        int score = tetris.getScore();
-        this.txtScore.setText(String.valueOf(score));
-
-        int level = tetris.getLevel();
-        this.txtLevel.setText(String.valueOf(level));
-
-        int lines = tetris.getLines();
-        this.txtLines.setText(String.valueOf(lines));
+//        int score = tetris.getScore();
+//        this.txtScore.setText(String.valueOf(score));
+//
+//        int level = tetris.getLevel();
+//        this.txtLevel.setText(String.valueOf(level));
+//
+//        int lines = tetris.getLines();
+//        this.txtLines.setText(String.valueOf(lines));
     }
 
     public Image getIcon(Tetros type) {

@@ -16,6 +16,7 @@ public class Timer {
     public static final int[] GRAVITY = { 60, 50, 40, 30, 20, 10, 8, 6, 4, 2, 1 };
 
     private final Timeline timeline;
+
     private int frame;
     private int threshold;
 
@@ -59,18 +60,13 @@ public class Timer {
 
     public void stop() {
         this.timeline.stop();
-
-        this.frame = 0;
-        this.threshold = GRAVITY[0];
     }
 
     public void reset() {
-        this.timeline.pause();
+        this.timeline.stop();
 
         this.frame = 0;
         this.threshold = GRAVITY[0];
-
-        this.timeline.playFromStart();
     }
 
     public void updateThreshold() {
