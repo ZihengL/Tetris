@@ -14,7 +14,6 @@ import java.net.URL;
 
 public class BrickComponent extends ImageView implements TypeUpdater {
 
-    public static final String RES_DIR = "/io/github/zihengl/tetris/img/";
     public static final int BRICK_SIZE = 35;
 
     public BrickComponent() {
@@ -27,13 +26,6 @@ public class BrickComponent extends ImageView implements TypeUpdater {
 
     @Override
     public void update(Tetros type) {
-        String path = RES_DIR + (type == null ? "EMPTY" : type) + ".jpg";
-        this.updateImage(path);
-    }
-
-    public void updateImage(String path) {
-        URL url = BrickComponent.class.getResource(path);
-
-        this.setImage(new Image(url.toString()));
+        this.setImage(ImageAsset.getImage(type));
     }
 }

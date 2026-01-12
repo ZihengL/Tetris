@@ -14,14 +14,14 @@ import java.net.URL;
  * @date 1/9/2026
  */
 
-public class TetropeekComponent extends ImageView implements Observer {
+public class PeekComponent extends ImageView implements Observer {
 
     public static final String RES_DIR = "/io/github/zihengl/tetris/img/";
     public static final int PEEK_ICON_SIZE = 100;
 
     private final int index;
 
-    public TetropeekComponent(int index) {
+    public PeekComponent(int index) {
         super();
         this.index = index;
 
@@ -32,10 +32,11 @@ public class TetropeekComponent extends ImageView implements Observer {
     @Override
     public void update(Observable observable) {
         Tetris tetris = (Tetris) observable;
-        Tetros type = tetris.getInQueue(this.index);
 
-        String path = String.format("%sICON_%s.png", RES_DIR, type);
-        URL url = this.getClass().getResource(path);
-        this.setImage(new Image(url.toString()));
+        Tetros type = tetris.getInQueue(this.index);
+        this.setImage(ImageAsset.getIcon(type));
+//        String path = String.format("%sICON_%s.png", RES_DIR, type);
+//        URL url = this.getClass().getResource(path);
+//        this.setImage(new Image(url.toString()));
     }
 }

@@ -4,24 +4,15 @@ import io.github.zihengl.tetris.controllers.commands.controls.KeyEventCommand;
 import io.github.zihengl.tetris.controllers.commands.controls.Keymaps;
 import io.github.zihengl.tetris.controllers.components.BrickComponent;
 import io.github.zihengl.tetris.controllers.components.HudComponent;
-import io.github.zihengl.tetris.controllers.components.HudComponents;
-import io.github.zihengl.tetris.controllers.components.TetropeekComponent;
-import io.github.zihengl.tetris.models.enums.Tetros;
+import io.github.zihengl.tetris.controllers.components.PeekComponent;
 import io.github.zihengl.tetris.models.objects.Grid;
 import io.github.zihengl.tetris.models.objects.Tetris;
 import io.github.zihengl.tetris.models.observer.Observable;
 import io.github.zihengl.tetris.models.observer.Observer;
 import javafx.fxml.FXML;
-import javafx.scene.Node;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
-import javafx.scene.text.Text;
-
-import java.net.URL;
-import java.util.List;
 
 /**
  * @author Zi
@@ -52,7 +43,7 @@ public class GamepaneController implements Observer {
 
         Tetris tetris = Tetris.instance;
 
-        // GRIDPANE
+        // GRID
         Grid grid = tetris.getGrid();
         for (int y = 0; y < Grid.BUFFER; y++)
             for (int x = 0; x < Grid.WIDTH; x++) {
@@ -71,12 +62,13 @@ public class GamepaneController implements Observer {
 
         // PEEK
         for (int i = Tetris.PEEK_SIZE - 1; i >= 0; i--) {
-            TetropeekComponent component = new TetropeekComponent(i);
+            PeekComponent component = new PeekComponent(i);
             tetris.addObserver(component);
 
             this.peekbox.getChildren().add(component);
         }
 
+        // SCORE, LEVEL, LINES
         this.scoreboxController.set("SCORE", tetris::getScore);
         this.levelboxController.set("LEVEL", tetris::getLevel);
         this.linesboxController.set("LINES", tetris::getLines);
@@ -90,22 +82,6 @@ public class GamepaneController implements Observer {
         this.scoreboxController.update();
         this.levelboxController.update();
         this.linesboxController.update();
-
-//        int score = tetris.getScore();
-//        this.txtScore.setText(String.valueOf(score));
-//
-//        int level = tetris.getLevel();
-//        this.txtLevel.setText(String.valueOf(level));
-//
-//        int lines = tetris.getLines();
-//        this.txtLines.setText(String.valueOf(lines));
-    }
-
-    public Image getIcon(Tetros type) {
-        String path = RES_DIR + "ICON_" + type + ".png";
-        URL url = GamepaneController.class.getResource(path);
-
-        return new Image(url.toString());
     }
 
     public void requestFocus() {

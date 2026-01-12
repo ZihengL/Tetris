@@ -1,6 +1,7 @@
 package io.github.zihengl.tetris.models.enums;
 
 import io.github.zihengl.tetris.models.objects.Point;
+import javafx.scene.image.Image;
 
 /**
  * @author Zi
