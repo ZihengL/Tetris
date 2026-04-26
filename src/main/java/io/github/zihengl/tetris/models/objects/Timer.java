@@ -10,6 +10,7 @@ import javafx.util.Duration;
  * @date 1/8/2026
  */
 
+// Some dirty codes here due to lack of time, so I needed to wrap up the project.
 public class Timer {
 
     public static final double TICKRATE = 1. / 60.;

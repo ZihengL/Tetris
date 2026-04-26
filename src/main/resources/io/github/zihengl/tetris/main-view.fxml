@@ -10,8 +10,6 @@
            fx:controller="io.github.zihengl.tetris.controllers.MainController"
            fx:id="mainpane">
 
-<!--    <fx:include fx:id="menupane" source="menu-view.fxml"/>-->
-
     <VBox fx:id="menupane"
           alignment="CENTER"
           spacing="20"
@@ -45,14 +43,5 @@
                    -fx-cursor: hand;"/>
     </VBox>
 
-<!--    <Rectangle width="${mainpane.width}"-->
-<!--               height="${mainpane.height}"-->
-<!--               style="-fx-fill: rgba(20, 20, 20, 0.8);"/>-->
-
     <fx:include fx:id="gamepane" source="game-view.fxml"/>
-
-<!--    <StackPane fx:id="stacks">-->
-<!--        <fx:include fx:id="menupane" source="menu-view.fxml"/>-->
-<!--        <fx:include fx:id="gamepane" source="game-view.fxml" visible="false"/>-->
-<!--    </StackPane>-->
 </StackPane>
