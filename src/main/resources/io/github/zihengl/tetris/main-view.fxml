@@ -1,17 +1,58 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.Insets?>
 <?import javafx.scene.layout.VBox?>
-
 <?import javafx.scene.layout.StackPane?>
-<VBox xmlns:fx="http://javafx.com/fxml"
-      fx:controller="io.github.zihengl.tetris.controllers.MainController"
-      fx:id="mainpane"
-      alignment="CENTER" spacing="20.0"
-      style="-fx-background-color: lightgrey;">
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.shape.Rectangle?>
 
-    <StackPane fx:id="stacks">
-        <fx:include fx:id="gamepane" source="game-view.fxml"/>
-        <fx:include fx:id="menupane" source="menu-view.fxml" visible="false"/>
-    </StackPane>
-</VBox>
+<?import javafx.scene.text.Text?>
+<StackPane xmlns:fx="http://javafx.com/fxml"
+           fx:controller="io.github.zihengl.tetris.controllers.MainController"
+           fx:id="mainpane">
+
+<!--    <fx:include fx:id="menupane" source="menu-view.fxml"/>-->
+
+    <VBox fx:id="menupane"
+          alignment="CENTER"
+          spacing="20"
+          style="-fx-background-color: rgba(20, 20, 20, 0.8);">
+
+        <Text text="TETRIS"
+              style="-fx-font-size: 36px;
+                     -fx-font-weight: bold;
+                     -fx-fill: #E7E7E7;
+                     -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.15), 5, 0, 0, 2);"/>
+        <Rectangle height="50"/>
+
+        <Button fx:id="btnPlay"
+                text="Play"
+                style="-fx-background-color: #3498db;
+                   -fx-text-fill: white;
+                   -fx-font-size: 16px;
+                   -fx-font-weight: bold;
+                   -fx-padding: 12px 24px;
+                   -fx-background-radius: 8px;
+                   -fx-cursor: hand;"/>
+
+        <Button fx:id="btnQuit"
+                text="Quit"
+                style="-fx-background-color: #3498db;
+                   -fx-text-fill: white;
+                   -fx-font-size: 16px;
+                   -fx-font-weight: bold;
+                   -fx-padding: 12px 24px;
+                   -fx-background-radius: 8px;
+                   -fx-cursor: hand;"/>
+    </VBox>
+
+<!--    <Rectangle width="${mainpane.width}"-->
+<!--               height="${mainpane.height}"-->
+<!--               style="-fx-fill: rgba(20, 20, 20, 0.8);"/>-->
+
+    <fx:include fx:id="gamepane" source="game-view.fxml"/>
+
+<!--    <StackPane fx:id="stacks">-->
+<!--        <fx:include fx:id="menupane" source="menu-view.fxml"/>-->
+<!--        <fx:include fx:id="gamepane" source="game-view.fxml" visible="false"/>-->
+<!--    </StackPane>-->
+</StackPane>

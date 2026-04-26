@@ -19,9 +19,7 @@ import javafx.scene.layout.VBox;
  * @date 1/7/2026
  */
 
-public class GamepaneController implements Observer {
-
-    public static final String RES_DIR = "/io/github/zihengl/tetris/img/";
+public class GamepaneController {
 
     @FXML private GridPane gridpane;
 
@@ -35,12 +33,12 @@ public class GamepaneController implements Observer {
     @FXML private VBox linesbox;
     @FXML private HudComponent linesboxController;
 
+    public GridPane getGridpane() {
+        return this.gridpane;
+    }
+
     @FXML
     private void initialize() {
-        this.gridpane.setOnMouseClicked(mouseEvent -> {
-            this.gridpane.requestFocus();
-        });
-
         Tetris tetris = Tetris.instance;
 
         // GRID
@@ -48,20 +46,19 @@ public class GamepaneController implements Observer {
         for (int y = 0; y < Grid.BUFFER; y++)
             for (int x = 0; x < Grid.WIDTH; x++) {
                 BrickComponent component = new BrickComponent();
-                grid.get(x, y).setUpdater(component);
 
+                grid.get(x, y).setUpdater(component);
                 this.gridpane.add(component, x, Grid.BUFFER - y);
             }
 
         // CONTROLS
-        for (Keymaps keymap : Keymaps.values())
-            this.gridpane.addEventHandler(
-                    KeyEvent.KEY_PRESSED,
-                    new KeyEventCommand(keymap.code, keymap.callbacker)
-            );
+        for (Keymaps keymap : Keymaps.values()) {
+            KeyEventCommand keyCommand = new KeyEventCommand(keymap.code, keymap.callbacker);
+            this.gridpane.addEventHandler(KeyEvent.KEY_PRESSED, keyCommand);
+        }
 
         // PEEK
-        for (int i = Tetris.PEEK_SIZE - 1; i >= 0; i--) {
+        for (int i = 0; i < Tetris.PEEK_SIZE; i++) {
             PeekComponent component = new PeekComponent(i);
             tetris.addObserver(component);
 
@@ -69,28 +66,8 @@ public class GamepaneController implements Observer {
         }
 
         // SCORE, LEVEL, LINES
-        this.scoreboxController.set("SCORE", tetris::getScore);
-        this.levelboxController.set("LEVEL", tetris::getLevel);
-        this.linesboxController.set("LINES", tetris::getLines);
-
-        tetris.addObserver(this);
-        this.update(tetris);
-    }
-
-    @Override
-    public void update(Observable observable) {
-        this.scoreboxController.update();
-        this.levelboxController.update();
-        this.linesboxController.update();
-    }
-
-    public void requestFocus() {
-        this.gridpane.setFocusTraversable(true);
-        this.gridpane.requestFocus();
-    }
-
-    public void play() {
-        this.gridpane.requestFocus();
-        Tetris.instance.reset();
+        this.scoreboxController.set("SCORE", tetris::getScore, tetris);
+        this.levelboxController.set("LEVEL", tetris::getLevel, tetris);
+        this.linesboxController.set("LINES", tetris::getLines, tetris);
     }
 }

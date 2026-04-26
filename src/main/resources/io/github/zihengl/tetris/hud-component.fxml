@@ -10,15 +10,16 @@
       spacing="10"
       style="-fx-background-color: #E7E7E7;
              -fx-background-radius: 10;
-             -fx-border-color: #B51212;
+             -fx-border-color: #3498db;
              -fx-border-width: 3;
-             -fx-border-radius: 5;">
+             -fx-border-radius: 5;
+             -fx-padding: 5">
 
     <Text fx:id="txtTitle"
-          style="-fx-fill: #B51212;
+          style="-fx-fill: #3498db;
                  -fx-font-size: 18px;
                  -fx-font-weight: bold;"/>
     <Text fx:id="txtContent"
-          style="-fx-fill: #B51212;
+          style="-fx-fill: #3498db;
                  -fx-font-size: 14px;"/>
 </VBox>

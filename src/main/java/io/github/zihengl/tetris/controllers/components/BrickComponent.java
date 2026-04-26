@@ -21,6 +21,7 @@ public class BrickComponent extends ImageView implements TypeUpdater {
         this.setFitWidth(BRICK_SIZE);
         this.setFitHeight(BRICK_SIZE);
 
+        // Starts off as an empty cell.
         this.update(null);
     }
 

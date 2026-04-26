@@ -1,5 +1,7 @@
 package io.github.zihengl.tetris.controllers;
 
+import io.github.zihengl.tetris.controllers.commands.menu.PlayCommand;
+import io.github.zihengl.tetris.controllers.commands.menu.QuitCommand;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -20,14 +22,7 @@ public class MenupaneController {
 
     @FXML
     private void initialize() {
-
-    }
-
-    public void play(ActionEvent actionEvent) {
-
-    }
-
-    public void quit(ActionEvent actionEvent) {
-        Platform.exit();
+//        this.btnPlay.setOnAction(new PlayCommand());
+//        this.btnQuit.setOnAction(new QuitCommand());
     }
 }

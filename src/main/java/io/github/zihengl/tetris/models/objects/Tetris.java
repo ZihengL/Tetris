@@ -168,17 +168,20 @@ public class Tetris extends Observable {
     }
 
     /**
-     * Syphon's from the Grid, then shifts the Tetro downwards
-     * as long as its current position is valid. Then, pushes
-     * the Tetro back upwards to its last valid position as its
-     * final position to settle in.
+     * Syphon from the Grid, then shifts the Tetro south
+     * as long as its current position is valid. Since the
+     * Tetro is now in an invalid position, we shift the Tetro
+     * one tick towards the north, which should be its last
+     * valid direction.
      */
     public void drop() {
+        Orientations direction = Orientations.SOUTH;
+
         this.syphon();
         while (this.isValid())
-            this.tetro.translate(Orientations.SOUTH.unit);
+            this.tetro.translate(direction.unit);
 
-        this.tetro.translate(Orientations.NORTH.unit);
+        this.tetro.translate(direction.opposite().unit);
         this.transmit();
 
         this.settle();

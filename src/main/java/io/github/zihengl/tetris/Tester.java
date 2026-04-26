@@ -6,21 +6,21 @@ import io.github.zihengl.tetris.models.objects.Tetris;
 public class Tester {
 
     public static void main(String[] args) {
-        Tetris tetris = Tetris.instance;
-
-        System.out.println(tetris.getTetro().getType());
-        System.out.println("\nSPAWN" + tetris);
-
-        for (int i = 0; i < 6; i++) {
-            tetris.shift(Orientations.EAST);
-        }
-        System.out.println("\nSHIFT EAST" + tetris);
-
-//        tetris.shift(Orientations.SOUTH);
-//        System.out.println("\nSHIFT SOUTH" + tetris);
-
-        tetris.rotateLeft();
-        System.out.println("\nROTATE LEFT" + tetris);
+//        Tetris tetris = Tetris.instance;
+//
+//        System.out.println(tetris.getTetro().getType());
+//        System.out.println("\nSPAWN" + tetris);
+//
+//        for (int i = 0; i < 6; i++) {
+//            tetris.shift(Orientations.EAST);
+//        }
+//        System.out.println("\nSHIFT EAST" + tetris);
+//
+////        tetris.shift(Orientations.SOUTH);
+////        System.out.println("\nSHIFT SOUTH" + tetris);
+//
+//        tetris.rotateLeft();
+//        System.out.println("\nROTATE LEFT" + tetris);
 
 //        tetris.rotateLeft();
 //        System.out.println("\nROTATE LEFT" + tetris);
@@ -36,5 +36,15 @@ public class Tester {
 //        System.out.println(1 << 20);
 //        System.out.println(Math.pow(2, 20));
 
+        int a = 1;
+        int b = 5;
+
+        System.out.println(a + " " + b);
+
+        a ^= b;
+        b ^= a;
+        a ^= b;
+
+        System.out.println(a + " " + b);
     }
 }

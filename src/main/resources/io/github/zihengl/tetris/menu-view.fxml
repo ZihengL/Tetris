@@ -8,6 +8,6 @@
             fx:controller="io.github.zihengl.tetris.controllers.MenupaneController"
             fx:id="menupane">
 
-    <Button fx:id="btnPlay" text="Play" onAction="#play"/>
-    <Button fx:id="btnQuit" text="Quit" onAction="#quit"/>
+    <Button fx:id="btnPlay" text="Play"/>
+    <Button fx:id="btnQuit" text="Quit"/>
 </VBox>

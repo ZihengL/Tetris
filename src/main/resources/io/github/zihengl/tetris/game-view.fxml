@@ -17,7 +17,7 @@
           minWidth="100"
           spacing="20"
           style="-fx-background-color: #3D3D3D;
-                 -fx-border-color: #6C6C6C;
+                 -fx-border-color: #3498db;
                  -fx-border-width: 1;
                  -fx-border-style: solid;
                  -fx-padding: 10;">
@@ -27,12 +27,12 @@
               alignment="CENTER"
               style="-fx-background-color: #E7E7E7;
                      -fx-background-radius: 10;
-                     -fx-border-color: #6E6E6E;
+                     -fx-border-color: #3498db;
                      -fx-border-width: 3;
                      -fx-border-radius: 5;
                      -fx-border-style: solid;">
-            <Text text="QUEUE"
-                  style="-fx-fill: #3D3D3D;
+            <Text text="NEXT"
+                  style="-fx-fill: #3498db;
                          -fx-font-size: 18px;
                          -fx-font-weight: bold;"/>
         </VBox>
